@@ -15,8 +15,10 @@ LDFLAGS =
 LDLIBS =
 
 ifeq ($(OS), Windows_NT)
-	LDLIBS += -lopengl32 -lgdi32 -lwinmm -lpthread -L"C:/raylib/lib"
+	LDLIBS += -lraylib -lopengl32 -lgdi32 -lwinmm -lpthread
 	TARGET := $(BUILD_DIR)/$(PROJECT_NAME).exe
+	CFLAGS += -I"C:/raylib/include"
+	LDFLAGS += -L"C:/raylib/lib"
 else
 	UNAME_S := $(shell uname -s)
 	ifeq ($(UNAME_S), Linux)
