@@ -9,13 +9,13 @@ BUILD_DIR = build
 OBJ_DIR = obj
 ASSETS_DIR = assets
 
-CC = clang
+CC = gcc
 CFLAGS = -Wall -Werror -Wextra -pedantic --std=c23 -g -I$(INC_DIR) -MMD -MP
 LDFLAGS =
 LDLIBS =
 
 ifeq ($(OS), Windows_NT)
-	LDLIBS += -lraylib -lopengl32 -lgdi32 -lwinmm -lpthread
+	LDLIBS += -lopengl32 -lgdi32 -lwinmm -lpthread -L"C:/raylib/lib"
 	TARGET := $(BUILD_DIR)/$(PROJECT_NAME).exe
 else
 	UNAME_S := $(shell uname -s)
