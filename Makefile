@@ -58,6 +58,7 @@ $(TARGET): $(APP_OBJ) $(LIB_OBJ)
 test: $(TEST_TARGETS)
 	@for test_exec in $(TEST_TARGETS); do \
 		./$$test_exec; \
+		valgrind --leak-check=full --show-leak-kinds=all $$test_exec; \
 	done
 
 $(BUILD_DIR)/%: $(TEST_DIR)/%.c $(LIB_OBJ)
