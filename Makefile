@@ -9,7 +9,7 @@ BUILD_DIR = build
 OBJ_DIR = obj
 ASSETS_DIR = assets
 
-CC = gcc
+CC = clang
 CFLAGS = -Wall -Werror -Wextra -pedantic --std=c23 -g -I$(INC_DIR) -MMD -MP
 LDFLAGS =
 LDLIBS =
