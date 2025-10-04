@@ -44,7 +44,7 @@ TEST_TARGETS = $(patsubst $(TEST_DIR)/%.c, $(BUILD_DIR)/%, $(TEST_SRC))
 
 CHECK_FILES = $(shell find $(BIN_DIR) $(SRC_DIR) $(TEST_DIR) $(INC_DIR) -name '*.c' -or -name '*.h')
 
-.PHONY: all test clean run check format-check tidy-check format tidy-fix
+.PHONY: all test clean run check format-check tidy-check format tidy-fix docs
 
 all: $(TARGET) copy-assets
 
@@ -80,6 +80,7 @@ copy-assets:
 clean:
 	@rm -rf $(BUILD_DIR)
 	@rm -rf $(OBJ_DIR)
+	@rm -rf docs
 
 check: format-check tidy-check
 
@@ -94,5 +95,11 @@ format:
 
 tidy-fix:
 	@clang-tidy -fix $(CHECK_FILES) -- $(CFLAGS) > /dev/null
+
+docs:
+	@command -v doxygen >/dev/null 2>&1 || (echo "Doxygen not found. Please install it and try again."; exit 1)
+	@test -f Doxyfile || (echo "Doxyfile not found. Please run 'doxygen -g' to create one."; exit 1)
+	@echo "Generating documentation..."
+	@doxygen Doxyfile
 
 -include $(DEPS)
