@@ -5,7 +5,6 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-// NOLINTNEXTLINE
 static int g_tombstone_marker;
 #define TOMBSTONE ((void*)&g_tombstone_marker)
 
