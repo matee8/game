@@ -3,15 +3,17 @@
 
 #include <raylib.h>
 
-typedef struct Player{
+typedef struct player{
     Vector3 position;
     float speed;
     int health;
+    int direction;
     Model model;
-} Player;
+    Texture2D texture;
+} player;
 
-void InitPlayer(Player* player, Vector3 position, float speed, int health, Model model) {}
-void UpdatePlayer(Player* player) {}
+void init_player(player* player, Vector3 position, float speed, int health);
+void update_player(player* player);
 
 #endif
 
