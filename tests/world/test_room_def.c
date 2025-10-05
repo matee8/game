@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "raylib.h"
+#include "game/rng.h"
 
 #if defined(_WIN32)
 #include <direct.h>
@@ -132,6 +132,32 @@ void test_double_load_and_unload(void) {
     assert(room_def_get_count() == 0);
 }
 
+void test_find_compatible(void) {
+    char full_path[256];
+    (void)snprintf(full_path, sizeof(full_path), "%s/%s", TEST_DIR,
+                   ROOMS_SUBDIR);
+    room_def_load_all(full_path);
+    rng_init(123);
+
+    const uint8_t south_door_req = DOOR_SOUTH;
+    const struct room_def* match = room_def_find_compatible(south_door_req);
+    assert(match != nullptr);
+    assert((match->door_mask & south_door_req) == south_door_req);
+    assert(strstr(match->model_path, "L_room_180.glb"));
+
+    const uint8_t north_door_req = DOOR_NORTH;
+    match = room_def_find_compatible(north_door_req);
+    assert(match != nullptr);
+    assert((match->door_mask & north_door_req) == north_door_req);
+    assert(strstr(match->model_path, "hallway_90.glb"));
+
+    const uint8_t impossible_req = DOOR_NORTH | DOOR_EAST;
+    match = room_def_find_compatible(impossible_req);
+    assert(match == nullptr);
+
+    room_def_unload_all();
+}
+
 int main(void) {
     puts("Starting room_def tests.\n");
     setup_mock_assets();
@@ -139,6 +165,7 @@ int main(void) {
     RUN_TEST(test_load_and_unload);
     RUN_TEST(test_find_matching);
     RUN_TEST(test_double_load_and_unload);
+    RUN_TEST(test_find_compatible);
 
     teardown_mock_assets();
 
