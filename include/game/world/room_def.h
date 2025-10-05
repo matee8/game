@@ -74,4 +74,17 @@ const struct room_def* room_def_get_by_index(size_t index);
  */
 const struct room_def* room_def_find_matching(uint8_t required_doors);
 
+/**
+ * @brief Finds a random room template that is compatible with a set of doors.
+ *
+ * This function is useful for growing the map organically. It finds a room
+ * that has AT LEAST the required doors, allowing for more open and varied
+ * layouts (e.g., a cross-room is a compatible match for a required north door).
+ *
+ * @param required_doors A bitmask of the doors the room must have.
+ * @return A constant pointer to a compatible struct room_def, or nullptr if no
+ * match is found.
+ */
+const struct room_def* room_def_find_compatible(uint8_t required_doors);
+
 #endif

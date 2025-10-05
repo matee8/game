@@ -144,6 +144,39 @@ const struct room_def* room_def_find_matching(uint8_t required_doors) {
     return result;
 }
 
+const struct room_def* room_def_find_compatible(uint8_t required_doors) {
+    if (!is_initialized) {
+        return nullptr;
+    }
+
+    struct vector matches;
+    if (vector_init(&matches) != 0) {
+        TraceLog(LOG_ERROR,
+                 "ROOM_TEMPLATE: Failed to initialize matches vector.");
+        return nullptr;
+    }
+
+    for (size_t i = 0; i < vector_len(&room_defs); i++) {
+        const struct room_def* template = vector_get(&room_defs, i);
+
+        if ((template->door_mask & required_doors) == required_doors) {
+            if (vector_push(&matches, (void*)template) != 0) {
+                TraceLog(LOG_WARNING,
+                         "ROOM_TEMPLATE: Failed to push match to vector.");
+            }
+        }
+    }
+
+    const struct room_def* result = nullptr;
+    if (!vector_is_empty(&matches)) {
+        int rand_index = rng_get_range(0, (int)vector_len(&matches) - 1);
+        result = (const struct room_def*)vector_get(&matches, rand_index);
+    }
+
+    vector_destroy(&matches);
+    return result;
+}
+
 static uint8_t parse_mask_from_filename(const char* filename) {
     if (strstr(filename, "hallway_0")) {
         return DOOR_EAST | DOOR_WEST;
