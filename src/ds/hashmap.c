@@ -125,6 +125,28 @@ size_t hashmap_capacity(const struct hashmap* map) {
     return map ? map->capacity : 0;
 }
 
+bool hashmap_iter(const struct hashmap* map,
+                  size_t* iterator,
+                  uint64_t* key,
+                  void** value) {
+    if (!map || !iterator || !key || !value) {
+        return false;
+    }
+
+    while (*iterator < map->capacity) {
+        struct hashmap_entry* entry = &map->entries[*iterator];
+        (*iterator)++;
+
+        if (!IS_EMPTY(entry) && !IS_TOMBSTONE(entry)) {
+            *key = entry->key;
+            *value = entry->value;
+            return true;
+        }
+    }
+
+    return false;
+}
+
 static int hashmap_resize(struct hashmap* map, size_t new_capacity) {
     struct hashmap_entry* new_entries =
         calloc(new_capacity, sizeof(struct hashmap_entry));

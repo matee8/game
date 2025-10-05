@@ -110,4 +110,33 @@ size_t hashmap_len(const struct hashmap* map);
  */
 size_t hashmap_capacity(const struct hashmap* map);
 
+/**
+ * @brief Iterates over the key-value pairs in the hash map.
+ *
+ * To use, initialize a size_t iterator to 0 and call this function in a loop.
+ * The function will find the next valid entry and update the iterator state.
+ *
+ * @example
+ * size_t iter = 0;
+ * uint64_t key;
+ * void* value;
+ * while (hashmap_next(my_map, &iter, &key, &value)) {
+ *     // process key and value
+ * }
+ *
+ * @param map A pointer to the constant hash map.
+ * @param[in,out] iterator A pointer to a size_t variable that tracks the
+ *                         iteration state. Must be initialized to 0 for the
+ *                         first call.
+ * @param[out] key A pointer that will receive the key of the next entry.
+ * @param[out] value A pointer to a void* that will receive the value of the
+ * next entry.
+ * @return true if a key-value pair was found, false if the iteration is
+ * complete.
+ */
+bool hashmap_iter(const struct hashmap* map,
+                  size_t* iterator,
+                  uint64_t* key,
+                  void** value);
+
 #endif
