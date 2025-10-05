@@ -134,8 +134,6 @@ void test_double_load_and_unload(void) {
 }
 
 int main(void) {
-    InitWindow(100, 100, "Test Runner");
-
     puts("Starting room_template tests.\n");
     setup_mock_assets();
 
@@ -146,7 +144,5 @@ int main(void) {
     teardown_mock_assets();
 
     puts("\nAll room_template tests passed successfully!");
-
-    CloseWindow();
     return EXIT_SUCCESS;
 }
