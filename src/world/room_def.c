@@ -1,4 +1,4 @@
-#include "game/world/room_template.h"
+#include "game/world/room_def.h"
 
 #include <errno.h>
 #include <stdbool.h>
@@ -12,20 +12,20 @@
 #include "game/ds/vector.h"
 #include "game/rng.h"
 
-static struct vector room_templates;
+static struct vector room_defs;
 static bool is_initialized = false;
 
 static uint8_t parse_mask_from_filename(const char* filename);
 
-int room_template_load_all(const char* directory_path) {
+int room_def_load_all(const char* directory_path) {
     if (is_initialized) {
-        TraceLog(LOG_WARNING, "ROOM_TEMPLATE: Templates already initialized.");
-        return (int)vector_len(&room_templates);
+        TraceLog(LOG_WARNING, "ROOM_DEF: Templates already initialized.");
+        return (int)vector_len(&room_defs);
     }
 
-    if (vector_init(&room_templates) != 0) {
+    if (vector_init(&room_defs) != 0) {
         TraceLog(LOG_ERROR,
-                 "ROOM_TEMPLATE: Failed to initialize vector (out of memory).");
+                 "ROOM_DEF: Failed to initialize vector (out of memory).");
         return -ENOMEM;
     }
 
@@ -33,7 +33,7 @@ int room_template_load_all(const char* directory_path) {
     FilePathList files = LoadDirectoryFiles(directory_path);
 
     if (!files.paths) {
-        TraceLog(LOG_ERROR, "ROOM_TEMPLATE: Failed to load directory: %s",
+        TraceLog(LOG_ERROR, "ROOM_DEF: Failed to load directory: %s",
                  directory_path);
         ret = -EIO;
         goto cleanup_vector;
@@ -51,7 +51,7 @@ int room_template_load_all(const char* directory_path) {
             continue;
         }
 
-        struct room_template* template = malloc(sizeof(struct room_template));
+        struct room_def* template = malloc(sizeof(struct room_def));
         if (!template) {
             ret = -ENOMEM;
             goto cleanup_files;
@@ -65,7 +65,7 @@ int room_template_load_all(const char* directory_path) {
         }
 
         template->door_mask = mask;
-        if (vector_push(&room_templates, template) != 0) {
+        if (vector_push(&room_defs, template) != 0) {
             free(template->model_path);
             free(template);
             ret = -ENOMEM;
@@ -74,51 +74,50 @@ int room_template_load_all(const char* directory_path) {
     }
 
     is_initialized = true;
-    TraceLog(LOG_INFO, "ROOM_TEMPLATE: Loaded %zu room templates.",
-             vector_len(&room_templates));
-    ret = (int)vector_len(&room_templates);
+    TraceLog(LOG_INFO, "ROOM_DEF: Loaded %zu room templates.",
+             vector_len(&room_defs));
+    ret = (int)vector_len(&room_defs);
 
 cleanup_files:
     UnloadDirectoryFiles(files);
 
 cleanup_vector:
     if (ret < 0) {
-        room_template_unload_all();
+        room_def_unload_all();
     }
 
     return ret;
 }
 
-void room_template_unload_all() {
+void room_def_unload_all() {
     if (!is_initialized) {
         return;
     }
 
-    for (size_t i = 0; i < vector_len(&room_templates); ++i) {
-        struct room_template* template = vector_get(&room_templates, i);
+    for (size_t i = 0; i < vector_len(&room_defs); ++i) {
+        struct room_def* template = vector_get(&room_defs, i);
         free(template->model_path);
         free(template);
     }
 
-    vector_destroy(&room_templates);
+    vector_destroy(&room_defs);
     is_initialized = false;
-    TraceLog(LOG_INFO, "ROOM_TEMPLATE: Unloaded all room templates.");
+    TraceLog(LOG_INFO, "ROOM_DEF: Unloaded all room templates.");
 }
 
-size_t room_template_get_count(void) {
-    return (int)is_initialized ? vector_len(&room_templates) : 0;
+size_t room_def_get_count(void) {
+    return (int)is_initialized ? vector_len(&room_defs) : 0;
 }
 
-const struct room_template* room_template_get_by_index(size_t index) {
+const struct room_def* room_def_get_by_index(size_t index) {
     if (!is_initialized) {
         return nullptr;
     }
 
-    return (const struct room_template*)vector_get(&room_templates, index);
+    return (const struct room_def*)vector_get(&room_defs, index);
 }
 
-const struct room_template* room_template_find_matching(
-    uint8_t required_doors) {
+const struct room_def* room_def_find_matching(uint8_t required_doors) {
     if (!is_initialized) {
         return nullptr;
     }
@@ -128,18 +127,17 @@ const struct room_template* room_template_find_matching(
         return nullptr;
     }
 
-    for (size_t i = 0; i < vector_len(&room_templates); ++i) {
-        const struct room_template* template = vector_get(&room_templates, i);
+    for (size_t i = 0; i < vector_len(&room_defs); ++i) {
+        const struct room_def* template = vector_get(&room_defs, i);
         if (template->door_mask == required_doors) {
             vector_push(&matches, (void*)template);
         }
     }
 
-    const struct room_template* result = nullptr;
+    const struct room_def* result = nullptr;
     if (!vector_is_empty(&matches)) {
-        size_t rand_index =
-            rng_get_range(0, (int)(vector_len(&matches)) - 1);
-        result = (const struct room_template*)vector_get(&matches, rand_index);
+        size_t rand_index = rng_get_range(0, (int)(vector_len(&matches)) - 1);
+        result = (const struct room_def*)vector_get(&matches, rand_index);
     }
 
     vector_destroy(&matches);
@@ -193,7 +191,7 @@ static uint8_t parse_mask_from_filename(const char* filename) {
         return DOOR_NORTH | DOOR_SOUTH | DOOR_EAST | DOOR_WEST;
     }
 
-    TraceLog(LOG_WARNING, "ROOM_TEMPLATE: Unrecognized room filename '%s'",
+    TraceLog(LOG_WARNING, "ROOM_DEF: Unrecognized room filename '%s'",
              filename);
     return 0;
 }
