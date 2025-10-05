@@ -10,6 +10,7 @@
 #include "raylib.h"
 
 #include "game/ds/vector.h"
+#include "game/rng.h"
 
 static struct vector room_templates;
 static bool is_initialized = false;
@@ -136,7 +137,8 @@ const struct room_template* room_template_find_matching(
 
     const struct room_template* result = nullptr;
     if (!vector_is_empty(&matches)) {
-        size_t rand_index = GetRandomValue(0, (int)vector_len(&matches) - 1);
+        size_t rand_index =
+            rng_get_range(0, (int)(vector_len(&matches)) - 1);
         result = (const struct room_template*)vector_get(&matches, rand_index);
     }
 
