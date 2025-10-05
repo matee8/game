@@ -1,5 +1,5 @@
-#ifndef GAME_WORLD_ROOM_TEMPLATE_H
-#define GAME_WORLD_ROOM_TEMPLATE_H
+#ifndef GAME_WORLD_ROOM_DEF_H
+#define GAME_WORLD_ROOM_DEF_H
 
 #include <stddef.h>
 #include <stdint.h>
@@ -16,13 +16,13 @@
 #define DOOR_WEST (1U << 3U)   // -X
 
 /**
- * @struct room_template
+ * @struct room_def
  * @brief Stores the metadata for a single type of room.
  *
  * This structure holds the information parsed from a room model file,
  * such as its connection points (doors) and its asset path.
  */
-struct room_template {
+struct room_def {
     char* model_path;  /**< Heap-allocated path to the .glb model file. */
     uint8_t door_mask; /**< Bitmask of door connections using DOOR_* flags. */
 };
@@ -38,7 +38,7 @@ struct room_template {
  * @return The number of templates successfully loaded on success.
  * @return On failure, returns a negative errno code (e.g., -ENOMEM, -EIO).
  */
-int room_template_load_all(const char* directory_path);
+int room_def_load_all(const char* directory_path);
 
 /**
  * @brief Frees all memory associated with the loaded room templates.
@@ -46,21 +46,21 @@ int room_template_load_all(const char* directory_path);
  * Should be called when the game is shutting down or changing levels to
  * prevent memory leaks.
  */
-void room_template_unload_all(void);
+void room_def_unload_all(void);
 
 /**
  * @brief Gets the total number of loaded room templates.
  * @return The number of templates available.
  */
-size_t room_template_get_count(void);
+size_t room_def_get_count(void);
 
 /**
  * @brief Retrieves a room template by its index in the internal list.
  * @param index The index of the template to retrieve.
- * @return A constant pointer to the RoomTemplate, or NULL if the index is
+ * @return A constant pointer to the struct room_def, or NULL if the index is
  * invalid.
  */
-const struct room_template* room_template_get_by_index(size_t index);
+const struct room_def* room_def_get_by_index(size_t index);
 
 /**
  * @brief Finds a random room template that has a specific set of doors.
@@ -69,9 +69,9 @@ const struct room_template* room_template_get_by_index(size_t index);
  * space, such as finding a dead-end room that only has a north door.
  *
  * @param required_doors A bitmask of the exact doors the room must have.
- * @return A constant pointer to a matching RoomTemplate, or NULL if no match is
- * found.
+ * @return A constant pointer to a matching struct room_def, or NULL if no match
+ * is found.
  */
-const struct room_template* room_template_find_matching(uint8_t required_doors);
+const struct room_def* room_def_find_matching(uint8_t required_doors);
 
 #endif

@@ -1,4 +1,4 @@
-#include "game/world/room_template.h"
+#include "game/world/room_def.h"
 
 #include <assert.h>
 #include <stddef.h>
@@ -26,7 +26,7 @@
         test();                                 \
     } while (0)
 
-static const char* TEST_DIR = "test_template_assets";
+static const char* TEST_DIR = "test_def_assets";
 static const char* ROOMS_SUBDIR = "rooms";
 
 void create_dummy_file(const char* path) {
@@ -80,13 +80,13 @@ void test_load_and_unload(void) {
     (void)snprintf(full_path, sizeof(full_path), "%s/%s", TEST_DIR,
                    ROOMS_SUBDIR);
 
-    int count = room_template_load_all(full_path);
+    int count = room_def_load_all(full_path);
     assert(count == 3);
-    assert(room_template_get_count() == 3);
+    assert(room_def_get_count() == 3);
 
     bool found = false;
-    for (size_t i = 0; i < room_template_get_count(); i++) {
-        const struct room_template* temp = room_template_get_by_index(i);
+    for (size_t i = 0; i < room_def_get_count(); i++) {
+        const struct room_def* temp = room_def_get_by_index(i);
         if (strstr(temp->model_path, "L_room_180.glb")) {
             found = true;
             assert(temp->door_mask == (DOOR_SOUTH | DOOR_WEST));
@@ -95,28 +95,27 @@ void test_load_and_unload(void) {
     }
     assert(found);
 
-    room_template_unload_all();
-    assert(room_template_get_count() == 0);
+    room_def_unload_all();
+    assert(room_def_get_count() == 0);
 }
 
 void test_find_matching(void) {
     char full_path[256];
     (void)snprintf(full_path, sizeof(full_path), "%s/%s", TEST_DIR,
                    ROOMS_SUBDIR);
-    room_template_load_all(full_path);
+    room_def_load_all(full_path);
 
     const uint8_t deadend_mask = DOOR_EAST;
-    const struct room_template* match =
-        room_template_find_matching(deadend_mask);
+    const struct room_def* match = room_def_find_matching(deadend_mask);
     assert(match != NULL);
     assert(match->door_mask == deadend_mask);
     assert(strstr(match->model_path, "deadend_0.glb"));
 
     const uint8_t no_match_mask = DOOR_NORTH | DOOR_EAST | DOOR_WEST;
-    match = room_template_find_matching(no_match_mask);
+    match = room_def_find_matching(no_match_mask);
     assert(match == NULL);
 
-    room_template_unload_all();
+    room_def_unload_all();
 }
 
 void test_double_load_and_unload(void) {
@@ -124,17 +123,17 @@ void test_double_load_and_unload(void) {
     (void)snprintf(full_path, sizeof(full_path), "%s/%s", TEST_DIR,
                    ROOMS_SUBDIR);
 
-    assert(room_template_load_all(full_path) == 3);
-    assert(room_template_load_all(full_path) == 3);
+    assert(room_def_load_all(full_path) == 3);
+    assert(room_def_load_all(full_path) == 3);
 
-    room_template_unload_all();
+    room_def_unload_all();
 
-    room_template_unload_all();
-    assert(room_template_get_count() == 0);
+    room_def_unload_all();
+    assert(room_def_get_count() == 0);
 }
 
 int main(void) {
-    puts("Starting room_template tests.\n");
+    puts("Starting room_def tests.\n");
     setup_mock_assets();
 
     RUN_TEST(test_load_and_unload);
@@ -143,6 +142,6 @@ int main(void) {
 
     teardown_mock_assets();
 
-    puts("\nAll room_template tests passed successfully!");
+    puts("\nAll room_def tests passed successfully!");
     return EXIT_SUCCESS;
 }
