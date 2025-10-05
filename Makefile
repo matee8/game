@@ -30,9 +30,9 @@ else
 endif
 
 
-APP_SRC = $(shell find $(BIN_DIR) -type f -name '*.c')
-LIB_SRC = $(shell find $(SRC_DIR) -type f -name '*.c')
-TEST_SRC = $(shell find $(TEST_DIR) -type f -name '*.c')
+APP_SRC = $(wildcard $(BIN_DIR)/*.c)
+LIB_SRC = $(wildcard $(SRC_DIR)/*.c)
+TEST_SRC = $(wildcard $(TEST_DIR)/*.c)
 
 APP_OBJ = $(patsubst $(BIN_DIR)/%.c, $(OBJ_DIR)/%.o, $(APP_SRC))
 LIB_OBJ = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(LIB_SRC))
@@ -42,7 +42,7 @@ DEPS = $(ALL_OBJ:.o=.d)
 TEST_TARGETS = $(patsubst $(TEST_DIR)/%.c, $(BUILD_DIR)/%, $(TEST_SRC))
 
 
-CHECK_FILES = $(shell find $(BIN_DIR) $(SRC_DIR) $(TEST_DIR) $(INC_DIR) -name '*.c' -or -name '*.h')
+CHECK_FILES = $(wildcard $(BIN_DIR)/*.c) $(wildcard $(SRC_DIR)/*.c) $(wildcard $(TEST_DIR)/*.c) $(wildcard $(INC_DIR)/*.h)
 
 .PHONY: all test clean run check format-check tidy-check format tidy-fix docs
 
