@@ -23,7 +23,9 @@
 #define RUN_TEST(test)                          \
     do {                                        \
         printf("Running test: %s...\n", #test); \
+        setup_mock_assets();                    \
         test();                                 \
+        teardown_mock_assets();                 \
     } while (0)
 
 static const char* TEST_DIR = "test_def_assets";
@@ -139,10 +141,10 @@ void test_find_compatible(void) {
     room_def_load_all(full_path);
     rng_init(123);
 
-    const uint8_t south_door_req = DOOR_SOUTH;
-    const struct room_def* match = room_def_find_compatible(south_door_req);
+    const uint8_t west_door_req = DOOR_WEST;
+    const struct room_def* match = room_def_find_compatible(west_door_req);
     assert(match != nullptr);
-    assert((match->door_mask & south_door_req) == south_door_req);
+    assert((match->door_mask & west_door_req) == west_door_req);
     assert(strstr(match->model_path, "L_room_180.glb"));
 
     const uint8_t north_door_req = DOOR_NORTH;
@@ -160,14 +162,11 @@ void test_find_compatible(void) {
 
 int main(void) {
     puts("Starting room_def tests.\n");
-    setup_mock_assets();
 
     RUN_TEST(test_load_and_unload);
     RUN_TEST(test_find_matching);
     RUN_TEST(test_double_load_and_unload);
     RUN_TEST(test_find_compatible);
-
-    teardown_mock_assets();
 
     puts("\nAll room_def tests passed successfully!");
     return EXIT_SUCCESS;
