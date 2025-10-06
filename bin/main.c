@@ -47,16 +47,16 @@ int main(void) {
 
     InitWindow(screenWidth, screenHeight,
                "raylib [core] example - basic window");
-    camera camera;
+    struct camera camera;
     init_camera(&camera);
 
-    player player;
-    init_player(&player, (Vector3){0, 0.1, 0}, 0.1f, 100);
+    struct player player;
+    init_player(&player, (Vector3){0, 0.1F, 0}, 0.1F, 100);
 
-    room room1;
-    room room2;
-    room* neighbors1[6] = {&room2, NULL, NULL, NULL, NULL, NULL};
-    room* neighbors2[6] = {NULL, &room1, NULL, NULL, NULL, NULL};
+    struct room room1;
+    struct room room2;
+    struct room* neighbors1[6] = {&room2, NULL, NULL, NULL, NULL, NULL};
+    struct room* neighbors2[6] = {NULL, &room1, NULL, NULL, NULL, NULL};
 
     init_room(&room1, (Vector3){0, 0, 0}, 1, neighbors1,
               "assets/models/rooms/cross_room_0.glb", NULL);
@@ -69,7 +69,7 @@ int main(void) {
                         room1.position.z},
               1, neighbors2, "assets/models/rooms/cube_room_0.glb", NULL);
 
-    room* current_room = &room1;
+    struct room* current_room = &room1;
 
     SetTargetFPS(60);  // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
@@ -79,7 +79,7 @@ int main(void) {
     {
         // Update
         //----------------------------------------------------------------------------------
-        // TODO: Update your variables here
+        
         update_player(&player);
         update_room(&current_room, &player);
         update_camera(&camera, current_room);
@@ -92,13 +92,13 @@ int main(void) {
 
         BeginMode3D(camera.camera_m);
 
-        DrawModel(player.model, player.position, 0.1f, WHITE);
+        DrawModel(player.model, player.position, 0.1F, WHITE);
         DrawModel(room1.model, room1.position, room1.scale, RED);
         DrawModel(room2.model, room2.position, room2.scale, BLACK);
         DrawBoundingBox(room1.bounds, GREEN);
         DrawBoundingBox(get_world_box(&room2), GREEN);
 
-        DrawGrid(20, 10.0f);  // Draw a grid
+        DrawGrid(20, 10.0F);  // Draw a grid
 
         EndMode3D();
 
