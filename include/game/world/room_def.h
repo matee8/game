@@ -63,28 +63,25 @@ size_t room_def_get_count(void);
 const struct room_def* room_def_get_by_index(size_t index);
 
 /**
- * @brief Finds a random room template that has a specific set of doors.
+ * @brief Finds a random room template that satisfies both required and
+ * forbidden door constraints.
  *
- * This function is useful for finding rooms that fit perfectly into a generated
- * space, such as finding a dead-end room that only has a north door.
+ * This is the primary search function for the generator. It ensures that placed
+ * rooms correctly connect to adjacent open doorways while simultaneously not
+ * creating new doorways that lead into adjacent solid walls.
  *
- * @param required_doors A bitmask of the exact doors the room must have.
- * @return A constant pointer to a matching struct room_def, or NULL if no match
- * is found.
+ * A template is considered a match if:
+ * 1. It contains all doors specified in the `required_doors` mask.
+ * 2. It contains none of the doors specified in the `forbidden_doors` mask.
+ *
+ * @param required_doors A bitmask of doors the room must have to be considered
+ * a match.
+ * @param forbidden_doors A bitmask of doors the room must NOT have to be
+ * considered a match.
+ * @return A constant pointer to a suitable RoomTemplate, or nullptr if no
+ * template satisfies the constraints.
  */
-const struct room_def* room_def_find_matching(uint8_t required_doors);
-
-/**
- * @brief Finds a random room template that is compatible with a set of doors.
- *
- * This function is useful for growing the map organically. It finds a room
- * that has AT LEAST the required doors, allowing for more open and varied
- * layouts (e.g., a cross-room is a compatible match for a required north door).
- *
- * @param required_doors A bitmask of the doors the room must have.
- * @return A constant pointer to a compatible struct room_def, or nullptr if no
- * match is found.
- */
-const struct room_def* room_def_find_compatible(uint8_t required_doors);
+const struct room_def* room_def_find_constrained(uint8_t required_doors,
+                                                 uint8_t forbidden_doors);
 
 #endif

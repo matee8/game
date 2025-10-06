@@ -14,6 +14,7 @@
 
 static struct vector room_defs;
 static bool is_initialized = false;
+static bool is_start_removed = false;
 
 static uint8_t parse_mask_from_filename(const char* filename);
 
@@ -117,34 +118,8 @@ const struct room_def* room_def_get_by_index(size_t index) {
     return (const struct room_def*)vector_get(&room_defs, index);
 }
 
-const struct room_def* room_def_find_matching(uint8_t required_doors) {
-    if (!is_initialized) {
-        return nullptr;
-    }
-
-    struct vector matches;
-    if (vector_init(&matches) != 0) {
-        return nullptr;
-    }
-
-    for (size_t i = 0; i < vector_len(&room_defs); ++i) {
-        const struct room_def* template = vector_get(&room_defs, i);
-        if (template->door_mask == required_doors) {
-            vector_push(&matches, (void*)template);
-        }
-    }
-
-    const struct room_def* result = nullptr;
-    if (!vector_is_empty(&matches)) {
-        size_t rand_index = rng_get_range(0, (int)(vector_len(&matches)) - 1);
-        result = (const struct room_def*)vector_get(&matches, rand_index);
-    }
-
-    vector_destroy(&matches);
-    return result;
-}
-
-const struct room_def* room_def_find_compatible(uint8_t required_doors) {
+const struct room_def* room_def_find_constrained(uint8_t required_doors,
+                                                 uint8_t forbidden_doors) {
     if (!is_initialized) {
         return nullptr;
     }
@@ -159,7 +134,11 @@ const struct room_def* room_def_find_compatible(uint8_t required_doors) {
     for (size_t i = 0; i < vector_len(&room_defs); i++) {
         const struct room_def* template = vector_get(&room_defs, i);
 
-        if ((template->door_mask & required_doors) == required_doors) {
+        bool has_required =
+            (template->door_mask & required_doors) == required_doors;
+        bool has_no_forbidden = (template->door_mask & forbidden_doors) == 0;
+
+        if ((int)has_required && (int)has_no_forbidden) {
             if (vector_push(&matches, (void*)template) != 0) {
                 TraceLog(LOG_WARNING,
                          "ROOM_TEMPLATE: Failed to push match to vector.");
@@ -182,21 +161,21 @@ static uint8_t parse_mask_from_filename(const char* filename) {
         return DOOR_SOUTH | DOOR_EAST | DOOR_NORTH | DOOR_WEST;
     }
 
-    if (strstr(filename, "deadend_0")) {
-        return DOOR_SOUTH;
-    }
-
-    if (strstr(filename, "deadend_90")) {
-        return DOOR_EAST;
-    }
-
-    if (strstr(filename, "deadend_180")) {
-        return DOOR_NORTH;
-    }
-
-    if (strstr(filename, "deadend_270")) {
-        return DOOR_WEST;
-    }
+    // if (strstr(filename, "deadend_0")) {
+    //     return DOOR_SOUTH;
+    // }
+    //
+    // if (strstr(filename, "deadend_90")) {
+    //     return DOOR_EAST;
+    // }
+    //
+    // if (strstr(filename, "deadend_180")) {
+    //     return DOOR_NORTH;
+    // }
+    //
+    // if (strstr(filename, "deadend_270")) {
+    //     return DOOR_WEST;
+    // }
 
     if (strstr(filename, "hallway_0")) {
         return DOOR_NORTH | DOOR_SOUTH;

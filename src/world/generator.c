@@ -100,25 +100,34 @@ int generator_create_chunk(int center_x, int center_y) {
         struct frontier_cell* cell_pos = vector_get(&frontiers, i);
 
         uint8_t required_doors = 0;
+        uint8_t forbidden_doors = 0;
 
         struct world_cell* north = grid_get_cell(cell_pos->x, cell_pos->y + 1);
         if (north && (north->template->door_mask & DOOR_SOUTH)) {
             required_doors |= DOOR_NORTH;
+        } else if (north) {
+            forbidden_doors |= DOOR_NORTH;
         }
 
         struct world_cell* south = grid_get_cell(cell_pos->x, cell_pos->y - 1);
         if (south && (south->template->door_mask & DOOR_NORTH)) {
             required_doors |= DOOR_SOUTH;
+        } else if (south) {
+            forbidden_doors |= DOOR_SOUTH;
         }
 
         struct world_cell* east = grid_get_cell(cell_pos->x + 1, cell_pos->y);
         if (east && (east->template->door_mask & DOOR_WEST)) {
             required_doors |= DOOR_EAST;
+        } else if (east) {
+            forbidden_doors |= DOOR_EAST;
         }
 
         struct world_cell* west = grid_get_cell(cell_pos->x - 1, cell_pos->y);
         if (west && (west->template->door_mask & DOOR_EAST)) {
             required_doors |= DOOR_WEST;
+        } else if (west) {
+            forbidden_doors |= DOOR_WEST;
         }
 
         if (required_doors == 0) {
@@ -126,7 +135,7 @@ int generator_create_chunk(int center_x, int center_y) {
         }
 
         const struct room_def* compatible =
-            room_def_find_compatible(required_doors);
+            room_def_find_constrained(required_doors, forbidden_doors);
         if (compatible) {
             grid_place_room(cell_pos->x, cell_pos->y, compatible);
         }
