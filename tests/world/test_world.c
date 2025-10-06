@@ -8,7 +8,7 @@ int main(void) {
 
     InitWindow(screenWidth, screenHeight, "Procedural World Test");
 
-    if (world_init(12345, "assets/models/rooms") != 0) {
+    if (world_init(1238972181, "assets/models/rooms") != 0) {
         TraceLog(LOG_ERROR, "Failed to initialize game world. Exiting.");
         CloseWindow();
         return -1;
@@ -26,7 +26,7 @@ int main(void) {
     while (!WindowShouldClose()) {
         UpdateCamera(&camera, CAMERA_FREE);
 
-        TraceLog(LOG_WARNING, "%d", world_update(camera.position));
+        world_update(camera.position);
 
         BeginDrawing();
         ClearBackground(RAYWHITE);

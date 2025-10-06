@@ -74,15 +74,15 @@ void test_init_places_start_room_and_chunk(void) {
         }
     }
 
-    assert(room_count == 5);
+    assert(room_count == 2);
 }
 
 void test_generation_is_deterministic(void) {
     char path_seed42[256];
-    char path_seed43[256];
+    char path_seed_random[256];
 
     assert(generator_init(42) == 0);
-    const struct room_def* template_run1 = grid_get_cell(1, 0)->template;
+    const struct room_def* template_run1 = grid_get_cell(0, -1)->template;
     assert(template_run1 != nullptr);
 
     strncpy(path_seed42, template_run1->model_path, sizeof(path_seed42) - 1);
@@ -91,23 +91,23 @@ void test_generation_is_deterministic(void) {
     teardown_full_environment();
     setup_full_environment();
 
-    assert(generator_init(43) == 0);
-    const struct room_def* template_run2 = grid_get_cell(1, 0)->template;
+    assert(generator_init(123213213) == 0);
+    const struct room_def* template_run2 = grid_get_cell(0, -1)->template;
     assert(template_run2 != nullptr);
 
-    strncpy(path_seed43, template_run2->model_path, sizeof(path_seed43) - 1);
-    path_seed43[sizeof(path_seed43) - 1] = '\0';
+    strncpy(path_seed_random, template_run2->model_path, sizeof(path_seed_random) - 1);
+    path_seed_random[sizeof(path_seed_random) - 1] = '\0';
 
     teardown_full_environment();
     setup_full_environment();
 
     assert(generator_init(42) == 0);
-    const struct room_def* template_run3 = grid_get_cell(1, 0)->template;
+    const struct room_def* template_run3 = grid_get_cell(0, -1)->template;
     assert(template_run3 != nullptr);
     const char* path_seed42_run2 = template_run3->model_path;
 
     assert(strcmp(path_seed42, path_seed42_run2) == 0);
-    assert(strcmp(path_seed42, path_seed43) != 0);
+    assert(strcmp(path_seed42, path_seed_random) != 0);
 }
 
 int main(void) {

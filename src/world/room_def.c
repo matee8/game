@@ -178,50 +178,52 @@ const struct room_def* room_def_find_compatible(uint8_t required_doors) {
 }
 
 static uint8_t parse_mask_from_filename(const char* filename) {
-    if (strstr(filename, "hallway_0")) {
-        return DOOR_EAST | DOOR_WEST;
+    if (strstr(filename, "cross_room_0")) {
+        return DOOR_SOUTH | DOOR_EAST | DOOR_NORTH | DOOR_WEST;
     }
-    if (strstr(filename, "hallway_90")) {
-        return DOOR_NORTH | DOOR_SOUTH;
-    }
-    if (strstr(filename, "thickhallway_0")) {
-        return DOOR_EAST | DOOR_WEST;
-    }
-    if (strstr(filename, "thickhallway_90")) {
-        return DOOR_NORTH | DOOR_SOUTH;
-    }
-    if (strstr(filename, "L_room_0")) {
-        return DOOR_NORTH | DOOR_EAST;
-    }
-    if (strstr(filename, "L_room_90")) {
-        return DOOR_NORTH | DOOR_WEST;
-    }
-    if (strstr(filename, "L_room_180")) {
-        return DOOR_SOUTH | DOOR_WEST;
-    }
-    if (strstr(filename, "L_room_270")) {
-        return DOOR_SOUTH | DOOR_EAST;
-    }
+
     if (strstr(filename, "deadend_0")) {
-        return DOOR_EAST;
-    }
-    if (strstr(filename, "deadend_90")) {
-        return DOOR_NORTH;
-    }
-    if (strstr(filename, "deadend_180")) {
-        return DOOR_WEST;
-    }
-    if (strstr(filename, "deadend_270")) {
         return DOOR_SOUTH;
     }
-    if (strstr(filename, "cross_room")) {
-        return DOOR_NORTH | DOOR_SOUTH | DOOR_EAST | DOOR_WEST;
+
+    if (strstr(filename, "deadend_90")) {
+        return DOOR_EAST;
     }
-    if (strstr(filename, "cube_room")) {
-        return DOOR_NORTH | DOOR_SOUTH | DOOR_EAST | DOOR_WEST;
+
+    if (strstr(filename, "deadend_180")) {
+        return DOOR_NORTH;
     }
+
+    if (strstr(filename, "deadend_270")) {
+        return DOOR_WEST;
+    }
+
+    if (strstr(filename, "hallway_0")) {
+        return DOOR_NORTH | DOOR_SOUTH;
+    }
+
+    if (strstr(filename, "hallway_90")) {
+        return DOOR_EAST | DOOR_WEST;
+    }
+
+    if (strstr(filename, "L_room_0")) {
+        return DOOR_SOUTH | DOOR_EAST;
+    }
+
+    if (strstr(filename, "L_room_90")) {
+        return DOOR_EAST | DOOR_NORTH;
+    }
+
+    if (strstr(filename, "L_room_180")) {
+        return DOOR_WEST | DOOR_NORTH;
+    }
+
+    if (strstr(filename, "L_room_180")) {
+        return DOOR_WEST | DOOR_SOUTH;
+    }
+
     if (strstr(filename, "starting_room")) {
-        return DOOR_NORTH | DOOR_SOUTH | DOOR_EAST | DOOR_WEST;
+        return DOOR_SOUTH;
     }
 
     TraceLog(LOG_WARNING, "ROOM_DEF: Unrecognized room filename '%s'",
