@@ -91,7 +91,7 @@ void test_load_and_unload(void) {
         const struct room_def* temp = room_def_get_by_index(i);
         if (strstr(temp->model_path, "L_room_180.glb")) {
             found = true;
-            assert(temp->door_mask == (DOOR_SOUTH | DOOR_WEST));
+            assert(temp->door_mask == (DOOR_WEST | DOOR_NORTH));
             break;
         }
     }
@@ -107,7 +107,7 @@ void test_find_matching(void) {
                    ROOMS_SUBDIR);
     room_def_load_all(full_path);
 
-    const uint8_t deadend_mask = DOOR_EAST;
+    const uint8_t deadend_mask = DOOR_SOUTH;
     const struct room_def* match = room_def_find_matching(deadend_mask);
     assert(match != NULL);
     assert(match->door_mask == deadend_mask);
@@ -151,7 +151,7 @@ void test_find_compatible(void) {
     match = room_def_find_compatible(north_door_req);
     assert(match != nullptr);
     assert((match->door_mask & north_door_req) == north_door_req);
-    assert(strstr(match->model_path, "hallway_90.glb"));
+    assert(strstr(match->model_path, "L_room_180.glb"));
 
     const uint8_t impossible_req = DOOR_NORTH | DOOR_EAST;
     match = room_def_find_compatible(impossible_req);
