@@ -21,18 +21,18 @@
  *
  * This function must be called once before any other function in this module
  * to start the deterministic sequence.
- * @param seed The initial 64-bit seed for the random sequence.
+ * @param seed The initial 32-bit seed for the random sequence.
  */
-void rng_init(uint64_t seed);
+void rng_init(uint32_t seed);
 
 /**
- * @brief Generates the next 64-bit unsigned integer in the sequence.
+ * @brief Generates the next 32-bit unsigned integer in the sequence.
  *
- * This can be useful for tasks that require a raw 64-bit random value.
+ * This can be useful for tasks that require a raw 32-bit random value.
  * For generating numbers in a specific range, rng_get_range() is preferred.
- * @return A pseudo-random 64-bit integer.
+ * @return A pseudo-random 32-bit integer.
  */
-uint64_t rng_next_u64(void);
+int32_t rng_next_i32(void);
 
 /**
  * @brief Generates a pseudo-random integer within a specified inclusive range.
@@ -43,6 +43,6 @@ uint64_t rng_next_u64(void);
  * @param max The maximum inclusive value of the range.
  * @return A pseudo-random integer within the specified range.
  */
-int rng_get_range(int min, int max);
+int32_t rng_get_range(int32_t min, int32_t max);
 
 #endif
