@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-void init_room(room* room,
+void init_room(struct room* room,
                Vector3 position,
                float scale,
                struct room* neighbors[],
@@ -25,7 +25,7 @@ void init_room(room* room,
     }
 }
 
-BoundingBox get_world_box(room* room) {
+BoundingBox get_world_box(struct room* room) {
     BoundingBox b = GetModelBoundingBox(room->model);
     b.min.x = room->position.x + b.min.x * room->scale;
     b.min.y = room->position.y + b.min.y * room->scale;
@@ -36,14 +36,14 @@ BoundingBox get_world_box(room* room) {
     return b;
 }
 
-Vector3 get_center(room* room) {
+Vector3 get_center(struct room* room) {
     return (Vector3){
         (room->bounds.min.x + room->bounds.max.x) / 2.0f + room->position.x,
         (room->bounds.min.y + room->bounds.max.y) / 2.0f + room->position.y,
         (room->bounds.min.z + room->bounds.max.z) / 2.0f + room->position.z};
 }
 
-void update_room(room** current_room, player* player) {
+void update_room(struct room** current_room, struct player* player) {
     BoundingBox b = (*current_room)->bounds;
     Vector3 pos = player->position;
 

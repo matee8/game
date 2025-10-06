@@ -34,13 +34,13 @@ enum neighbor {
  * The room structure contains information about its model, position, scale,
  * bounding box, and neighboring rooms in all six directions.
  */
-typedef struct room {
+struct room {
     Model model;               /**< 3D model representing the room */
     BoundingBox bounds;        /**< Bounding box of the room */
     float scale;               /**< Scale factor of the room */
     Vector3 position;          /**< World position of the room */
     struct room* neighbors[6]; /**< Pointers to neighboring rooms (RIGHT, LEFT, UP, DOWN, FORWARD, BACKWARD) */
-} room;
+};
 
 /**
  * @brief Initializes a room with a model, texture, scale, position, and neighbors.
@@ -52,7 +52,7 @@ typedef struct room {
  * @param model_path File path to the room's 3D model
  * @param texture_path File path to the room's texture
  */
-void init_room(room* room, Vector3 position, float scale, struct room* neighbors[], char* model_path, char* texture_path);
+void init_room(struct room* room, Vector3 position, float scale, struct room* neighbors[], char* model_path, char* texture_path);
 
 /**
  * @brief Gets the world-space bounding box of the room.
@@ -60,7 +60,7 @@ void init_room(room* room, Vector3 position, float scale, struct room* neighbors
  * @param room Pointer to the room
  * @return BoundingBox The bounding box in world coordinates
  */
-BoundingBox get_world_box(room* room);
+BoundingBox get_world_box(struct room* room);
 
 /**
  * @brief Gets the center position of the room.
@@ -68,7 +68,7 @@ BoundingBox get_world_box(room* room);
  * @param room Pointer to the room
  * @return Vector3 The center position of the room
  */
-Vector3 get_center(room* room);
+Vector3 get_center(struct room* room);
 
 /**
  * @brief Updates the room based on the player's state or position.
@@ -76,6 +76,6 @@ Vector3 get_center(room* room);
  * @param room Pointer to a pointer to the room
  * @param player Pointer to the player
  */
-void update_room(room** room, player* player);
+void update_room(struct room** room, struct player* player);
 
 #endif // ROOM_H

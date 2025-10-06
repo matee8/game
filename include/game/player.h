@@ -19,14 +19,14 @@
  * The player structure contains information about the player's position, speed,
  * health, direction, and 3D model/texture for rendering.
  */
-typedef struct player {
+struct player {
     Vector3 position;  /**< World position of the player */
     float speed;       /**< Movement speed of the player */
     int health;        /**< Current health of the player */
     int direction;     /**< Current facing direction of the player */
     Model model;       /**< 3D model representing the player */
     Texture2D texture; /**< Texture applied to the player's model */
-} player;
+};
 
 /**
  * @brief Initializes a player with position, speed, and health.
@@ -36,13 +36,13 @@ typedef struct player {
  * @param speed Movement speed of the player
  * @param health Initial health of the player
  */
-void init_player(player* player, Vector3 position, float speed, int health);
+void init_player(struct player* player, Vector3 position, float speed, int health);
 
 /**
  * @brief Updates the player's state, position, and interactions.
  * 
  * @param player Pointer to the player to update
  */
-void update_player(player* player);
+void update_player(struct player* player);
 
 #endif // PLAYER_H
