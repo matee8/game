@@ -95,7 +95,8 @@ void test_generation_is_deterministic(void) {
     const struct room_def* template_run2 = grid_get_cell(0, -1)->template;
     assert(template_run2 != nullptr);
 
-    strncpy(path_seed_random, template_run2->model_path, sizeof(path_seed_random) - 1);
+    strncpy(path_seed_random, template_run2->model_path,
+            sizeof(path_seed_random) - 1);
     path_seed_random[sizeof(path_seed_random) - 1] = '\0';
 
     teardown_full_environment();
