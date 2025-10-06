@@ -65,9 +65,11 @@ int world_update(Vector3 player_pos) {
 
     generator_create_chunk(player_grid_x, player_grid_y);
 
-    const int scan_radius = LOAD_RADIUS + 2; 
-    for (int y = player_grid_y - scan_radius; y <= player_grid_y + scan_radius; y++) {
-        for (int x = player_grid_x - scan_radius; x <= player_grid_x + scan_radius; x++) {
+    const int scan_radius = LOAD_RADIUS + 2;
+    for (int y = player_grid_y - scan_radius; y <= player_grid_y + scan_radius;
+         y++) {
+        for (int x = player_grid_x - scan_radius;
+             x <= player_grid_x + scan_radius; x++) {
             struct world_cell* cell = grid_get_cell(x, y);
             if (!cell) {
                 continue;
@@ -92,16 +94,16 @@ int world_draw(void) {
         return -EINVAL;
     }
 
-    for (int y = player_grid_y - LOAD_RADIUS; y <= player_grid_y + LOAD_RADIUS; y++) {
-        for (int x = player_grid_x - LOAD_RADIUS; x <= player_grid_x + LOAD_RADIUS; x++) {
+    for (int y = player_grid_y - LOAD_RADIUS; y <= player_grid_y + LOAD_RADIUS;
+         y++) {
+        for (int x = player_grid_x - LOAD_RADIUS;
+             x <= player_grid_x + LOAD_RADIUS; x++) {
             struct world_cell* cell = grid_get_cell(x, y);
 
             if (cell && (int)cell->is_model_loaded) {
-                Vector3 room_pos = {
-                    .x = (float)cell->grid_x * ROOM_SIZE,
-                    .y = 0.0F,
-                    .z = (float)cell->grid_y * ROOM_SIZE
-                };
+                Vector3 room_pos = {.x = (float)cell->grid_x * ROOM_SIZE,
+                                    .y = 0.0F,
+                                    .z = (float)cell->grid_y * ROOM_SIZE};
                 DrawModel(cell->model, room_pos, 1.0F, WHITE);
             }
         }

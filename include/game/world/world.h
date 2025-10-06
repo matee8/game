@@ -15,9 +15,9 @@
 /**
  * @brief Initializes the entire world system.
  *
- * This function orchestrates the initialization of all underlying world modules:
- * it loads room templates, initializes the world grid, and calls the generator
- * to create the starting area.
+ * This function orchestrates the initialization of all underlying world
+ * modules: it loads room templates, initializes the world grid, and calls the
+ * generator to create the starting area.
  *
  * @param seed The seed for the world generation.
  * @param assets_path The path to the directory containing room models.

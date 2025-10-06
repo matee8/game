@@ -14,10 +14,10 @@ int main(void) {
         return -1;
     }
 
-    Camera camera = { 0 };
-    camera.position = (Vector3){ 10.0F, 10.0F, 10.0F };
-    camera.target = (Vector3){ 0.0F, 0.0F, 0.0F };
-    camera.up = (Vector3){ 0.0F, 1.0F, 0.0F };
+    Camera camera = {0};
+    camera.position = (Vector3){10.0F, 10.0F, 10.0F};
+    camera.target = (Vector3){0.0F, 0.0F, 0.0F};
+    camera.up = (Vector3){0.0F, 1.0F, 0.0F};
     camera.fovy = 60.0F;
     camera.projection = CAMERA_PERSPECTIVE;
 
@@ -39,7 +39,8 @@ int main(void) {
         EndMode3D();
 
         DrawFPS(10, 10);
-        DrawText("Free camera controls: Move (W,A,S,D), Look (Mouse)", 10, 40, 20, DARKGRAY);
+        DrawText("Free camera controls: Move (W,A,S,D), Look (Mouse)", 10, 40,
+                 20, DARKGRAY);
 
         EndDrawing();
     }
