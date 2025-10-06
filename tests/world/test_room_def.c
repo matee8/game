@@ -101,25 +101,6 @@ void test_load_and_unload(void) {
     assert(room_def_get_count() == 0);
 }
 
-void test_find_matching(void) {
-    char full_path[256];
-    (void)snprintf(full_path, sizeof(full_path), "%s/%s", TEST_DIR,
-                   ROOMS_SUBDIR);
-    room_def_load_all(full_path);
-
-    const uint8_t deadend_mask = DOOR_SOUTH;
-    const struct room_def* match = room_def_find_matching(deadend_mask);
-    assert(match != NULL);
-    assert(match->door_mask == deadend_mask);
-    assert(strstr(match->model_path, "deadend_0.glb"));
-
-    const uint8_t no_match_mask = DOOR_NORTH | DOOR_EAST | DOOR_WEST;
-    match = room_def_find_matching(no_match_mask);
-    assert(match == NULL);
-
-    room_def_unload_all();
-}
-
 void test_double_load_and_unload(void) {
     char full_path[256];
     (void)snprintf(full_path, sizeof(full_path), "%s/%s", TEST_DIR,
@@ -134,27 +115,39 @@ void test_double_load_and_unload(void) {
     assert(room_def_get_count() == 0);
 }
 
-void test_find_compatible(void) {
+void test_find_constrained(void) {
     char full_path[256];
     (void)snprintf(full_path, sizeof(full_path), "%s/%s", TEST_DIR,
                    ROOMS_SUBDIR);
     room_def_load_all(full_path);
-    rng_init(123);
+    rng_init(42);
 
-    const uint8_t west_door_req = DOOR_WEST;
-    const struct room_def* match = room_def_find_compatible(west_door_req);
+    const struct room_def* match = nullptr;
+
+    uint8_t required1 = DOOR_SOUTH;
+    uint8_t forbidden1 = DOOR_NORTH;
+    match = room_def_find_constrained(required1, forbidden1);
     assert(match != nullptr);
-    assert((match->door_mask & west_door_req) == west_door_req);
     assert(strstr(match->model_path, "L_room_180.glb"));
+    assert((match->door_mask & required1) == required1);
+    assert((match->door_mask & forbidden1) == 0);
 
-    const uint8_t north_door_req = DOOR_NORTH;
-    match = room_def_find_compatible(north_door_req);
+    uint8_t required2 = DOOR_SOUTH;
+    uint8_t forbidden2 = DOOR_WEST;
+    match = room_def_find_constrained(required2, forbidden2);
     assert(match != nullptr);
-    assert((match->door_mask & north_door_req) == north_door_req);
-    assert(strstr(match->model_path, "L_room_180.glb"));
+    assert(strstr(match->model_path, "hallway_90.glb"));
+    assert((match->door_mask & required2) == required2);
+    assert((match->door_mask & forbidden2) == 0);
 
-    const uint8_t impossible_req = DOOR_NORTH | DOOR_EAST;
-    match = room_def_find_compatible(impossible_req);
+    uint8_t required3 = DOOR_NORTH;
+    uint8_t forbidden3 = DOOR_SOUTH;
+    match = room_def_find_constrained(required3, forbidden3);
+    assert(match == nullptr);
+
+    uint8_t required4 = DOOR_NORTH;
+    uint8_t forbidden4 = 0;
+    match = room_def_find_constrained(required4, forbidden4);
     assert(match == nullptr);
 
     room_def_unload_all();
@@ -164,9 +157,8 @@ int main(void) {
     puts("Starting room_def tests.\n");
 
     RUN_TEST(test_load_and_unload);
-    RUN_TEST(test_find_matching);
     RUN_TEST(test_double_load_and_unload);
-    RUN_TEST(test_find_compatible);
+    RUN_TEST(test_find_constrained);
 
     puts("\nAll room_def tests passed successfully!");
     return EXIT_SUCCESS;

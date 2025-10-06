@@ -15,7 +15,7 @@ int main(void) {
     }
 
     Camera camera = {0};
-    camera.position = (Vector3){10.0F, 10.0F, 10.0F};
+    camera.position = (Vector3){0.0F, 0.0F, 10.0F};
     camera.target = (Vector3){0.0F, 0.0F, 0.0F};
     camera.up = (Vector3){0.0F, 1.0F, 0.0F};
     camera.fovy = 60.0F;
