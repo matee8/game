@@ -21,7 +21,7 @@ void init_room(struct room* room,
     room->scale = scale;
     room->bounds = get_world_box(room);
     if (neighbors) {
-        memcpy(room->neighbors, neighbors, sizeof(room->neighbors));
+        memcpy((void*)room->neighbors, (void*)neighbors, sizeof(room->neighbors));
     }
 }
 
@@ -38,9 +38,9 @@ BoundingBox get_world_box(struct room* room) {
 
 Vector3 get_center(struct room* room) {
     return (Vector3){
-        (room->bounds.min.x + room->bounds.max.x) / 2.0f + room->position.x,
-        (room->bounds.min.y + room->bounds.max.y) / 2.0f + room->position.y,
-        (room->bounds.min.z + room->bounds.max.z) / 2.0f + room->position.z};
+        (room->bounds.min.x + room->bounds.max.x) / 2.0F + room->position.x,
+        (room->bounds.min.y + room->bounds.max.y) / 2.0F + room->position.y,
+        (room->bounds.min.z + room->bounds.max.z) / 2.0F + room->position.z};
 }
 
 void update_room(struct room** current_room, struct player* player) {
@@ -51,31 +51,31 @@ void update_room(struct room** current_room, struct player* player) {
     if (pos.x > b.max.x && (*current_room)->neighbors[0] != NULL) {
         *current_room = (*current_room)->neighbors[0];
         player->position.x =
-            (*current_room)->bounds.min.x + 0.1f;  // belépési pozíció
+            (*current_room)->bounds.min.x + 0.1F;  // belépési pozíció
     }
     // -X irány
     else if (pos.x < b.min.x && (*current_room)->neighbors[1] != NULL) {
         *current_room = (*current_room)->neighbors[1];
-        player->position.x = (*current_room)->bounds.max.x - 0.1f;
+        player->position.x = (*current_room)->bounds.max.x - 0.1F;
     }
     // +Y irány
     else if (pos.y > b.max.y && (*current_room)->neighbors[2] != NULL) {
         *current_room = (*current_room)->neighbors[2];
-        player->position.y = (*current_room)->bounds.min.y + 0.1f;
+        player->position.y = (*current_room)->bounds.min.y + 0.1F;
     }
     // -Y irány
     else if (pos.y < b.min.y && (*current_room)->neighbors[3] != NULL) {
         *current_room = (*current_room)->neighbors[3];
-        player->position.y = (*current_room)->bounds.max.y - 0.1f;
+        player->position.y = (*current_room)->bounds.max.y - 0.1F;
     }
     // +Z irány
     else if (pos.z > b.max.z && (*current_room)->neighbors[4] != NULL) {
         *current_room = (*current_room)->neighbors[4];
-        player->position.z = (*current_room)->bounds.min.z + 0.1f;
+        player->position.z = (*current_room)->bounds.min.z + 0.1F;
     }
     // -Z irány
     else if (pos.z < b.min.z && (*current_room)->neighbors[5] != NULL) {
         *current_room = (*current_room)->neighbors[5];
-        player->position.z = (*current_room)->bounds.max.z - 0.1f;
+        player->position.z = (*current_room)->bounds.max.z - 0.1F;
     }
 }
