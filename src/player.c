@@ -1,7 +1,7 @@
 #include "../include/game/player.h"
 #include <raylib.h>
 
-void init_player(player* player, Vector3 position, float speed, int health) {
+void init_player(struct player* player, Vector3 position, float speed, int health) {
     Model model = LoadModel("assets/models/player/player.glb");
     Texture2D texture = LoadTexture("assets/textures/player/player.png");
     model.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;
@@ -14,7 +14,7 @@ void init_player(player* player, Vector3 position, float speed, int health) {
     player->texture = texture;
 }
 
-void update_player(player* player) {
+void update_player(struct player* player) {
     if (IsKeyDown(KEY_W))
         player->position.z -= player->speed;
     if (IsKeyDown(KEY_S))

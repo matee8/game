@@ -20,17 +20,17 @@
  * The camera structure contains the Raylib Camera3D object and a pointer to the
  * previously active room for smooth transitions or updates.
  */
-typedef struct camera {
+struct camera {
     Camera3D camera_m;       /**< The Raylib 3D camera */
-    room* prev_current_room; /**< Pointer to the previously active room */
-} camera;
+    struct room* prev_current_room; /**< Pointer to the previously active room */
+};
 
 /**
  * @brief Initializes the camera with default settings.
  * 
  * @param camera Pointer to the camera to initialize
  */
-void init_camera(camera* camera);
+void init_camera(struct camera* camera);
 
 /**
  * @brief Updates the camera based on the current room and its state.
@@ -38,6 +38,6 @@ void init_camera(camera* camera);
  * @param camera Pointer to the camera to update
  * @param current_room Pointer to the current active room
  */
-void update_camera(camera* camera, room* current_room);
+void update_camera(struct camera* camera, struct room* current_room);
 
 #endif // CAMERA_H
