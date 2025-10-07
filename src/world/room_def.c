@@ -15,7 +15,15 @@
 static struct vector room_defs;
 static bool is_initialized = false;
 
-static uint8_t parse_mask_from_filename(const char* filename);
+struct room_attributes {
+    uint8_t door_mask;
+    int weight;
+};
+
+static struct room_attributes parse_attributes_from_filename(
+    const char* filename);
+static const struct room_def* select_weighted_random_from_matches(
+    const struct vector* matches);
 
 int room_def_load_all(const char* directory_path) {
     if (is_initialized) {
@@ -46,8 +54,8 @@ int room_def_load_all(const char* directory_path) {
         }
 
         const char* filename = GetFileName(path);
-        uint8_t mask = parse_mask_from_filename(filename);
-        if (mask == 0) {
+        struct room_attributes attr = parse_attributes_from_filename(filename);
+        if (attr.door_mask == 0) {
             continue;
         }
 
@@ -64,7 +72,8 @@ int room_def_load_all(const char* directory_path) {
             goto cleanup_files;
         }
 
-        template->door_mask = mask;
+        template->door_mask = attr.door_mask;
+        template->weight = attr.weight;
         if (vector_push(&room_defs, template) != 0) {
             free(template->model_path);
             free(template);
@@ -145,11 +154,8 @@ const struct room_def* room_def_find_constrained(uint8_t required_doors,
         }
     }
 
-    const struct room_def* result = nullptr;
-    if (!vector_is_empty(&matches)) {
-        int rand_index = rng_get_range(0, (int)vector_len(&matches) - 1);
-        result = (const struct room_def*)vector_get(&matches, rand_index);
-    }
+    const struct room_def* result =
+        select_weighted_random_from_matches(&matches);
 
     vector_destroy(&matches);
     return result;
@@ -176,56 +182,80 @@ void room_def_remove(const struct room_def* room_to_remove) {
     }
 }
 
-static uint8_t parse_mask_from_filename(const char* filename) {
+static struct room_attributes parse_attributes_from_filename(
+    const char* filename) {
+    struct room_attributes attr = {0};
+
     if (strstr(filename, "cross_room_0")) {
-        return DOOR_SOUTH | DOOR_EAST | DOOR_NORTH | DOOR_WEST;
+        attr.door_mask = DOOR_SOUTH | DOOR_EAST | DOOR_NORTH | DOOR_WEST;
+        attr.weight = 5;
+    } else if (strstr(filename, "deadend_0")) {
+        attr.door_mask = DOOR_SOUTH;
+        attr.weight = 2;
+    } else if (strstr(filename, "deadend_90")) {
+        attr.door_mask = DOOR_EAST;
+        attr.weight = 2;
+    } else if (strstr(filename, "deadend_180")) {
+        attr.door_mask = DOOR_NORTH;
+        attr.weight = 2;
+    } else if (strstr(filename, "deadend_270")) {
+        attr.door_mask = DOOR_WEST;
+        attr.weight = 2;
+    } else if (strstr(filename, "hallway_0")) {
+        attr.door_mask = DOOR_NORTH | DOOR_SOUTH;
+        attr.weight = 10;
+    } else if (strstr(filename, "hallway_90")) {
+        attr.door_mask = DOOR_EAST | DOOR_WEST;
+        attr.weight = 10;
+    } else if (strstr(filename, "L_room_0")) {
+        attr.door_mask = DOOR_SOUTH | DOOR_EAST;
+        attr.weight = 8;  // Medium weight
+    } else if (strstr(filename, "L_room_90")) {
+        attr.door_mask = DOOR_EAST | DOOR_NORTH;
+        attr.weight = 8;
+    } else if (strstr(filename, "L_room_180")) {
+        attr.door_mask = DOOR_WEST | DOOR_NORTH;
+        attr.weight = 8;
+    } else if (strstr(filename, "L_room_270")) {
+        attr.door_mask = DOOR_WEST | DOOR_SOUTH;
+        attr.weight = 8;
+    } else if (strstr(filename, "starting_room")) {
+        attr.door_mask = DOOR_SOUTH;
+        attr.weight = 0;
+    } else {
+        TraceLog(LOG_WARNING, "ROOM_DEF: Unrecognized room filename '%s'",
+                 filename);
     }
 
-    // if (strstr(filename, "deadend_0")) {
-    //     return DOOR_SOUTH;
-    // }
-    //
-    // if (strstr(filename, "deadend_90")) {
-    //     return DOOR_EAST;
-    // }
-    //
-    // if (strstr(filename, "deadend_180")) {
-    //     return DOOR_NORTH;
-    // }
-    //
-    // if (strstr(filename, "deadend_270")) {
-    //     return DOOR_WEST;
-    // }
+    return attr;
+}
 
-    if (strstr(filename, "hallway_0")) {
-        return DOOR_NORTH | DOOR_SOUTH;
+static const struct room_def* select_weighted_random_from_matches(
+    const struct vector* matches) {
+    if (vector_is_empty(matches)) {
+        return nullptr;
     }
 
-    if (strstr(filename, "hallway_90")) {
-        return DOOR_EAST | DOOR_WEST;
+    int total_weight = 0;
+    for (size_t i = 0; i < vector_len(matches); ++i) {
+        const struct room_def* def = vector_get(matches, i);
+        total_weight += def->weight;
     }
 
-    if (strstr(filename, "L_room_0")) {
-        return DOOR_SOUTH | DOOR_EAST;
+    if (total_weight <= 0) {
+        int rand_index = rng_get_range(0, (int)vector_len(matches) - 1);
+        return vector_get(matches, rand_index);
     }
 
-    if (strstr(filename, "L_room_90")) {
-        return DOOR_EAST | DOOR_NORTH;
+    int roll = rng_get_range(0, total_weight - 1);
+
+    for (size_t i = 0; i < vector_len(matches); ++i) {
+        const struct room_def* def = vector_get(matches, i);
+        roll -= def->weight;
+        if (roll < 0) {
+            return def;
+        }
     }
 
-    if (strstr(filename, "L_room_180")) {
-        return DOOR_WEST | DOOR_NORTH;
-    }
-
-    if (strstr(filename, "L_room_270")) {
-        return DOOR_WEST | DOOR_SOUTH;
-    }
-
-    if (strstr(filename, "starting_room")) {
-        return DOOR_SOUTH;
-    }
-
-    TraceLog(LOG_WARNING, "ROOM_DEF: Unrecognized room filename '%s'",
-             filename);
-    return 0;
+    return vector_get(matches, vector_len(matches) - 1);
 }

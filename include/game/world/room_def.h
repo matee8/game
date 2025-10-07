@@ -25,6 +25,8 @@
 struct room_def {
     char* model_path;  /**< Heap-allocated path to the .glb model file. */
     uint8_t door_mask; /**< Bitmask of door connections using DOOR_* flags. */
+    int weight; /**< The probability weight for procedural generation. Higher is
+                   more common. */
 };
 
 /**

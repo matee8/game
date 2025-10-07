@@ -36,6 +36,8 @@ int generator_init(unsigned int seed) {
         return -ENOENT;
     }
 
+    room_def_remove(start);
+
     grid_place_room(0, 0, start);
     if (generator_create_chunk(0, 0) != 0) {
         TraceLog(LOG_ERROR, "GENERATOR: Initial chunk generation failed.");
