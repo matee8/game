@@ -14,7 +14,6 @@
 
 static struct vector room_defs;
 static bool is_initialized = false;
-static bool is_start_removed = false;
 
 static uint8_t parse_mask_from_filename(const char* filename);
 
@@ -156,6 +155,27 @@ const struct room_def* room_def_find_constrained(uint8_t required_doors,
     return result;
 }
 
+void room_def_remove(const struct room_def* room_to_remove) {
+    if (!is_initialized || !room_to_remove) {
+        return;
+    }
+
+    for (size_t i = 0; i < vector_len(&room_defs); ++i) {
+        if (vector_get(&room_defs, i) == room_to_remove) {
+            void* last_element = vector_pop(&room_defs);
+
+            if (i < vector_len(&room_defs)) {
+                vector_set(&room_defs, i, last_element);
+            }
+
+            TraceLog(LOG_DEBUG,
+                     "ROOM_DEF: Removed '%s' from the generation pool.",
+                     room_to_remove->model_path);
+            return;
+        }
+    }
+}
+
 static uint8_t parse_mask_from_filename(const char* filename) {
     if (strstr(filename, "cross_room_0")) {
         return DOOR_SOUTH | DOOR_EAST | DOOR_NORTH | DOOR_WEST;
@@ -197,7 +217,7 @@ static uint8_t parse_mask_from_filename(const char* filename) {
         return DOOR_WEST | DOOR_NORTH;
     }
 
-    if (strstr(filename, "L_room_180")) {
+    if (strstr(filename, "L_room_270")) {
         return DOOR_WEST | DOOR_SOUTH;
     }
 

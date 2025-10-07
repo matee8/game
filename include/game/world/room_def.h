@@ -84,4 +84,18 @@ const struct room_def* room_def_get_by_index(size_t index);
 const struct room_def* room_def_find_constrained(uint8_t required_doors,
                                                  uint8_t forbidden_doors);
 
+/**
+ * @brief Removes a room definition from the available generation pool.
+ *
+ * This function is used to prevent special, one-off rooms (like the starting
+ * room) from being procedurally generated after they have been manually placed.
+ * It efficiently removes the specified template from the internal list using a
+ * "swap and pop" operation.
+ *
+ * @param room_to_remove A constant pointer to the room definition to remove. If
+ *                       the pointer is not found in the list, the function does
+ * nothing.
+ */
+void room_def_remove(const struct room_def* room_to_remove);
+
 #endif
