@@ -66,8 +66,8 @@ void test_init_places_start_room_and_chunk(void) {
     assert(strstr(center->template->model_path, "starting_room.glb"));
 
     int room_count = 0;
-    for (int y = -2; y <= 2; y++) {
-        for (int x = -2; x <= 2; x++) {
+    for (int32_t y = -2; y <= 2; y++) {
+        for (int32_t x = -2; x <= 2; x++) {
             if (grid_get_cell(x, y) != nullptr) {
                 room_count++;
             }

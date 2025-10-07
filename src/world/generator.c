@@ -13,8 +13,8 @@
 #include "game/world/room_def.h"
 
 struct frontier_cell {
-    int x;
-    int y;
+    int32_t x;
+    int32_t y;
 };
 
 int generator_init(unsigned int seed) {
@@ -47,7 +47,7 @@ int generator_init(unsigned int seed) {
     return 0;
 }
 
-int generator_create_chunk(int center_x, int center_y) {
+int generator_create_chunk(int32_t center_x, int32_t center_y) {
     struct vector frontiers;
 
     if (vector_init(&frontiers) != 0) {
@@ -58,8 +58,8 @@ int generator_create_chunk(int center_x, int center_y) {
 
     int ret = 0;
 
-    for (int y = center_y - 2; y <= center_y + 2; ++y) {
-        for (int x = center_x - 2; x <= center_x + 2; ++x) {
+    for (int32_t y = center_y - 2; y <= center_y + 2; ++y) {
+        for (int32_t x = center_x - 2; x <= center_x + 2; ++x) {
             if (grid_get_cell(x, y) != nullptr) {
                 continue;
             }

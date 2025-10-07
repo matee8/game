@@ -9,6 +9,8 @@
 #ifndef GAME_WORLD_GENERATOR_H
 #define GAME_WORLD_GENERATOR_H
 
+#include <stdint.h>
+
 /**
  * @brief Initializes the generator and the world's starting state.
  *
@@ -36,6 +38,6 @@ int generator_init(unsigned int seed);
  * @param center_x The center grid x-coordinate of the chunk to generate.
  * @param center_y The center grid y-coordinate of the chunk to generate.
  */
-int generator_create_chunk(int center_x, int center_y);
+int generator_create_chunk(int32_t center_x, int32_t center_y);
 
 #endif

@@ -24,8 +24,8 @@ struct world_cell {
                                       */
     Model model;                     /**< The loaded Raylib 3D model. */
     bool is_model_loaded; /**< True if the 3D model is currently in VRAM. */
-    int grid_x;           /**< The cell's X coordinate on the grid. */
-    int grid_y;           /**< The cell's Y coordinate on the grid. */
+    int32_t grid_x;       /**< The cell's X coordinate on the grid. */
+    int32_t grid_y;       /**< The cell's Y coordinate on the grid. */
 };
 
 /**
@@ -58,7 +58,7 @@ void grid_destroy(void);
  * @return 0 on success, -EINVAL if room_template is NULL, or -ENOMEM on
  * allocation failure.
  */
-int grid_place_room(int x, int y, const struct room_def* room_template);
+int grid_place_room(int32_t x, int32_t y, const struct room_def* room_template);
 
 /**
  * @brief Retrieves a cell from the grid.
@@ -67,7 +67,7 @@ int grid_place_room(int x, int y, const struct room_def* room_template);
  * @return A pointer to the WorldCell, or NULL if no room exists at that
  * coordinate.
  */
-struct world_cell* grid_get_cell(int x, int y);
+struct world_cell* grid_get_cell(int32_t x, int32_t y);
 
 /**
  * @brief Ensures the 3D model for a room is loaded into memory.

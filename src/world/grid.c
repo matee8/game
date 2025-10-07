@@ -11,7 +11,7 @@
 static struct hashmap grid;
 static bool is_initialized = false;
 
-static inline uint64_t grid_key(int x, int y);
+static inline uint64_t grid_key(int32_t x, int32_t y);
 
 int grid_init() {
     if (is_initialized) {
@@ -47,7 +47,9 @@ void grid_destroy(void) {
     is_initialized = false;
 }
 
-int grid_place_room(int x, int y, const struct room_def* room_template) {
+int grid_place_room(int32_t x,
+                    int32_t y,
+                    const struct room_def* room_template) {
     if (!is_initialized) {
         TraceLog(LOG_WARNING, "GRID: Called place_room before initialization.");
         return -ECANCELED;
@@ -82,7 +84,7 @@ int grid_place_room(int x, int y, const struct room_def* room_template) {
     return 0;
 }
 
-struct world_cell* grid_get_cell(int x, int y) {
+struct world_cell* grid_get_cell(int32_t x, int32_t y) {
     if (!is_initialized) {
         return nullptr;
     }
@@ -121,6 +123,6 @@ int grid_unload_model(struct world_cell* cell) {
     return 0;
 }
 
-static inline uint64_t grid_key(int x, int y) {
-    return ((uint64_t)(x) << 32U) | (uint32_t)(y);
+static inline uint64_t grid_key(int32_t x, int32_t y) {
+    return ((uint64_t)(uint32_t)x << 32U) | (uint32_t)y;
 }

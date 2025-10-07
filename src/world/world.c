@@ -13,8 +13,8 @@
 static const float ROOM_SIZE = 4.0F;
 static const int LOAD_RADIUS = 1;
 
-static int player_grid_x = -9999;
-static int player_grid_y = -9999;
+static int32_t player_grid_x = -9999;
+static int32_t player_grid_y = -9999;
 static bool is_initialized = false;
 
 int world_init(unsigned int seed, const char* assets_path) {
@@ -53,8 +53,8 @@ int world_update(Vector3 player_pos) {
         return -EINVAL;
     }
 
-    int new_grid_x = (int)roundf(player_pos.x / ROOM_SIZE);
-    int new_grid_y = (int)roundf(player_pos.z / ROOM_SIZE);
+    int32_t new_grid_x = (int32_t)roundf(player_pos.x / ROOM_SIZE);
+    int32_t new_grid_y = (int32_t)roundf(player_pos.z / ROOM_SIZE);
 
     if (new_grid_x == player_grid_x && new_grid_y == player_grid_y) {
         return 0;
@@ -66,17 +66,17 @@ int world_update(Vector3 player_pos) {
     generator_create_chunk(player_grid_x, player_grid_y);
 
     const int scan_radius = LOAD_RADIUS + 2;
-    for (int y = player_grid_y - scan_radius; y <= player_grid_y + scan_radius;
-         y++) {
-        for (int x = player_grid_x - scan_radius;
+    for (int32_t y = player_grid_y - scan_radius;
+         y <= player_grid_y + scan_radius; y++) {
+        for (int32_t x = player_grid_x - scan_radius;
              x <= player_grid_x + scan_radius; x++) {
             struct world_cell* cell = grid_get_cell(x, y);
             if (!cell) {
                 continue;
             }
 
-            int dist_x = abs(x - player_grid_x);
-            int dist_y = abs(y - player_grid_y);
+            int32_t dist_x = abs(x - player_grid_x);
+            int32_t dist_y = abs(y - player_grid_y);
 
             if (dist_x <= LOAD_RADIUS && dist_y <= LOAD_RADIUS) {
                 grid_load_model(cell);
@@ -94,9 +94,9 @@ int world_draw(void) {
         return -EINVAL;
     }
 
-    for (int y = player_grid_y - LOAD_RADIUS; y <= player_grid_y + LOAD_RADIUS;
-         y++) {
-        for (int x = player_grid_x - LOAD_RADIUS;
+    for (int32_t y = player_grid_y - LOAD_RADIUS;
+         y <= player_grid_y + LOAD_RADIUS; y++) {
+        for (int32_t x = player_grid_x - LOAD_RADIUS;
              x <= player_grid_x + LOAD_RADIUS; x++) {
             struct world_cell* cell = grid_get_cell(x, y);
 
