@@ -83,8 +83,8 @@ void test_load_and_unload(void) {
                    ROOMS_SUBDIR);
 
     int count = room_def_load_all(full_path);
-    assert(count == 2);
-    assert(room_def_get_count() == 2);
+    assert(count == 3);
+    assert(room_def_get_count() == 3);
 
     bool found = false;
     for (size_t i = 0; i < room_def_get_count(); i++) {
@@ -106,8 +106,8 @@ void test_double_load_and_unload(void) {
     (void)snprintf(full_path, sizeof(full_path), "%s/%s", TEST_DIR,
                    ROOMS_SUBDIR);
 
-    assert(room_def_load_all(full_path) == 2);
-    assert(room_def_load_all(full_path) == 2);
+    assert(room_def_load_all(full_path) == 3);
+    assert(room_def_load_all(full_path) == 3);
 
     room_def_unload_all();
 
@@ -159,7 +159,7 @@ void test_remove_room_def(void) {
                    ROOMS_SUBDIR);
 
     room_def_load_all(full_path);
-    assert(room_def_get_count() == 2);
+    assert(room_def_get_count() == 3);
 
     const struct room_def* to_remove = nullptr;
     for (size_t i = 0; i < room_def_get_count(); i++) {
@@ -174,7 +174,7 @@ void test_remove_room_def(void) {
 
     room_def_remove(to_remove);
 
-    assert(room_def_get_count() == 1);
+    assert(room_def_get_count() == 2);
 
     bool was_found_after_remove = false;
     for (size_t i = 0; i < room_def_get_count(); i++) {
@@ -186,10 +186,10 @@ void test_remove_room_def(void) {
     assert(was_found_after_remove == false);
 
     room_def_remove(to_remove);
-    assert(room_def_get_count() == 1);
+    assert(room_def_get_count() == 2);
 
     room_def_remove(nullptr);
-    assert(room_def_get_count() == 1);
+    assert(room_def_get_count() == 2);
 
     room_def_unload_all();
 }
