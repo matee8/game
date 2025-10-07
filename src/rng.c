@@ -33,7 +33,7 @@ uint64_t rng_next_u64(void) {
     return result;
 }
 
-int rng_get_range(int min, int max) {
+int rng_get_range(const int min, const int max) {
     assert(min <= max && "rng_get_range: min cannot be greater than max");
 
     uint64_t range = (uint64_t)(max - min) + 1;
