@@ -6,8 +6,8 @@
  * string construction and manipulation. It avoids heap allocations for small
  * strings, offering significant performance benefits in common use cases.
  */
-#ifndef COMPILER_DS_STRING_H
-#define COMPILER_DS_STRING_H
+#ifndef GAME_DS_STRING_H
+#define GAME_DS_STRING_H
 
 #include <stdbool.h>
 #include <stddef.h>
