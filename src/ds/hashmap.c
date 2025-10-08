@@ -5,7 +5,6 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-// NOLINTNEXTLINE
 static int g_tombstone_marker;
 #define TOMBSTONE ((void*)&g_tombstone_marker)
 
@@ -124,6 +123,28 @@ size_t hashmap_len(const struct hashmap* map) {
 
 size_t hashmap_capacity(const struct hashmap* map) {
     return map ? map->capacity : 0;
+}
+
+bool hashmap_iter(const struct hashmap* map,
+                  size_t* iterator,
+                  uint64_t* key,
+                  void** value) {
+    if (!map || !iterator || !key || !value) {
+        return false;
+    }
+
+    while (*iterator < map->capacity) {
+        struct hashmap_entry* entry = &map->entries[*iterator];
+        (*iterator)++;
+
+        if (!IS_EMPTY(entry) && !IS_TOMBSTONE(entry)) {
+            *key = entry->key;
+            *value = entry->value;
+            return true;
+        }
+    }
+
+    return false;
 }
 
 static int hashmap_resize(struct hashmap* map, size_t new_capacity) {

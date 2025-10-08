@@ -134,6 +134,45 @@ void test_null_args(void) {
     assert(hashmap_capacity(nullptr) == 0);
 }
 
+void test_iterator(void) {
+    struct hashmap map;
+    int values[] = {10, 20, 30, 40, 50};
+    assert(hashmap_init(&map) == 0);
+
+    size_t iter = 0;
+    uint64_t key = 0;
+    void* value = nullptr;
+    assert(hashmap_iter(&map, &iter, &key, &value) == false);
+
+    hashmap_set(&map, 1, &values[0], nullptr);
+    hashmap_set(&map, 2, &values[1], nullptr);
+    hashmap_set(&map, 3, &values[2], nullptr);
+    hashmap_set(&map, 4, &values[3], nullptr);
+
+    hashmap_remove(&map, 2);
+
+    iter = 0;
+    int found_count = 0;
+    bool found_keys[5] = {false};
+
+    while (hashmap_iter(&map, &iter, &key, &value)) {
+        found_count++;
+        assert(key >= 1 && key <= 4);
+        found_keys[key] = true;
+
+        int* val_ptr = (int*)value;
+        assert(*val_ptr == (int)key * 10);
+    }
+
+    assert(found_count == 3);
+    assert(found_keys[1] == true);
+    assert(found_keys[2] == false);
+    assert(found_keys[3] == true);
+    assert(found_keys[4] == true);
+
+    hashmap_destroy(&map);
+}
+
 int main(void) {
     puts("Starting hashmap tests.\n");
 
@@ -145,6 +184,7 @@ int main(void) {
     RUN_TEST(test_collision_handling);
     RUN_TEST(test_resizing);
     RUN_TEST(test_null_args);
+    RUN_TEST(test_iterator);
 
     puts("\nAll hashmap tests passed successfully!");
 
