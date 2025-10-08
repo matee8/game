@@ -1,5 +1,5 @@
-#include "../include/game/camera.h"
-#include "../include/game/room.h"
+#include "game/camera.h"
+#include "game/room.h"
 
 #include <stdlib.h>
 

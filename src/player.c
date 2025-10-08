@@ -1,4 +1,4 @@
-#include "../include/game/player.h"
+#include "game/player.h"
 #include <raylib.h>
 
 void init_player(struct player* player,
