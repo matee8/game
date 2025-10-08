@@ -21,7 +21,8 @@ void init_room(struct room* room,
     room->scale = scale;
     room->bounds = get_world_box(room);
     if (neighbors) {
-        memcpy((void*)room->neighbors, (void*)neighbors, sizeof(room->neighbors));
+        memcpy((void*)room->neighbors, (void*)neighbors,
+               sizeof(room->neighbors));
     }
 }
 
