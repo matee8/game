@@ -9,8 +9,8 @@
  * interactions.
  */
 
-#ifndef CAMERA_H
-#define CAMERA_H
+#ifndef GAME_CAMERA_H
+#define GAME_CAMERA_H
 
 #include <raylib.h>
 #include "room.h"
