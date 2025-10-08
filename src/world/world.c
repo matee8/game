@@ -2,6 +2,7 @@
 
 #include <errno.h>
 #include <math.h>
+#include <stdint.h>
 #include <stdlib.h>
 
 #include "raylib.h"
@@ -62,6 +63,11 @@ int world_update(Vector3 player_pos) {
 
     player_grid_x = new_grid_x;
     player_grid_y = new_grid_y;
+
+    if (player_grid_x > INT32_MAX - 2 || player_grid_x < INT32_MIN + 2 ||
+        player_grid_y > INT32_MAX - 2 || player_grid_y < INT32_MIN + 2) {
+        return 0;
+    }
 
     generator_create_chunk(player_grid_x, player_grid_y);
 
