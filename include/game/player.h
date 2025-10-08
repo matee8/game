@@ -27,11 +27,11 @@ struct player {
     int direction;    /**< Current facing direction of the player */
     Model model;      /**< 3D model representing the player */
 
-    Texture2D frames[]; /**< Texture frames applied to the player's model */
     int frameCount;
     int currentFrame;
     float frameTime;
     float frameTimer;
+    Texture2D frames[]; /**< Texture frames applied to the player's model */
 };
 
 /**

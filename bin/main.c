@@ -29,8 +29,8 @@
  *
  ********************************************************************************************/
 
+#include <raylib.h>
 #include <stdlib.h>
-#include "raylib.h"
 
 #include "../include/game/camera.h"
 #include "../include/game/player.h"
@@ -55,10 +55,12 @@ int main(void) {
 
     struct room room1;
     struct room room2;
-    struct room* neighbors1[6] = {&room2, NULL, NULL, NULL, NULL, NULL};
+    struct room room3;
+    struct room* neighbors1[6] = {&room2, NULL, NULL, NULL, &room3, NULL};
     struct room* neighbors2[6] = {NULL, &room1, NULL, NULL, NULL, NULL};
+    struct room* neighbors3[6] = {NULL, NULL, NULL, NULL, NULL, &room1};
 
-    init_room(&room1, (Vector3){0, 0, 0}, 1, neighbors1,
+    init_room(&room1, (Vector3){0, 0, 0}, 6, neighbors1,
               "assets/models/rooms/cross_room_0.glb", NULL);
 
     BoundingBox box = get_world_box(&room1);
@@ -67,7 +69,12 @@ int main(void) {
     init_room(&room2,
               (Vector3){room1.position.x + roomLength, room1.position.y,
                         room1.position.z},
-              1, neighbors2, "assets/models/rooms/cube_room_0.glb", NULL);
+              6, neighbors2, "assets/models/rooms/cross_room_0.glb", NULL);
+
+    init_room(&room3,
+              (Vector3){room1.position.x, room1.position.y,
+                        room1.position.z + roomLength},
+              6, neighbors3, "assets/models/rooms/cross_room_0.glb", NULL);
 
     struct room* current_room = &room1;
 
@@ -95,6 +102,7 @@ int main(void) {
         DrawModel(player.model, player.position, 0.1F, WHITE);
         DrawModel(room1.model, room1.position, room1.scale, RED);
         DrawModel(room2.model, room2.position, room2.scale, BLACK);
+        DrawModel(room3.model, room3.position, room3.scale, BLUE);
         DrawBoundingBox(room1.bounds, GREEN);
         DrawBoundingBox(get_world_box(&room2), GREEN);
 
@@ -108,7 +116,7 @@ int main(void) {
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
-    UnloadTexture(player.texture);
+    // UnloadTexture(player.texture);
     UnloadModel(player.model);
     UnloadModel(room1.model);
 
