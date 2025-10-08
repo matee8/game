@@ -1,4 +1,4 @@
-#include "../include/game/room.h"
+#include "game/room.h"
 #include <raylib.h>
 #include <stdlib.h>
 #include <string.h>

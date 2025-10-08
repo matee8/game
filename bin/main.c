@@ -32,9 +32,9 @@
 #include <raylib.h>
 #include <stdlib.h>
 
-#include "../include/game/camera.h"
-#include "../include/game/player.h"
-#include "../include/game/room.h"
+#include "game/camera.h"
+#include "game/player.h"
+#include "game/room.h"
 
 //------------------------------------------------------------------------------------
 // Program main entry point
