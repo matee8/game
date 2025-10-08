@@ -25,7 +25,11 @@
 struct camera {
     Camera3D camera_m; /**< The Raylib 3D camera */
     struct room*
-        prev_current_room; /**< Pointer to the previously active room */
+        prev_current_room;   /**< Pointer to the previously active room */
+    Vector3 prev_position;   /**< Previous position of the camera */
+    Vector3 target_position; /**< Previous target point of the camera */
+    Vector3 prev_center;
+    Vector3 target_center;
 };
 
 /**
