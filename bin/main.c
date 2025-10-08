@@ -79,7 +79,7 @@ int main(void) {
     {
         // Update
         //----------------------------------------------------------------------------------
-        
+
         update_player(&player);
         update_room(&current_room, &player);
         update_camera(&camera, current_room);

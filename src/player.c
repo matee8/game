@@ -14,7 +14,6 @@ void init_player(struct player* player,
     player->health = health;
     player->direction = 0;
     player->model = model;
-    player->texture = texture;
 }
 
 void update_player(struct player* player) {
