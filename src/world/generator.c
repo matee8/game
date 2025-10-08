@@ -136,6 +136,11 @@ int generator_create_chunk(int32_t center_x, int32_t center_y) {
             continue;
         }
 
+        if (cell_pos->x == INT32_MAX || cell_pos->x == INT32_MIN ||
+            cell_pos->y == INT32_MAX || cell_pos->y == INT32_MIN) {
+            forbidden_doors = ~required_doors;
+        }
+
         const struct room_def* compatible =
             room_def_find_constrained(required_doors, forbidden_doors);
         if (compatible) {
