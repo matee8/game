@@ -15,10 +15,10 @@ LDFLAGS =
 LDLIBS =
 
 ifeq ($(OS), Windows_NT)
-	LDLIBS += -lraylib -lopengl32 -lgdi32 -lwinmm -lpthread
+	LDLIBS += -lraylib -lopengl32 -lgdi32 -lwinmm -lpthread -luser32 -lkernel32
 	TARGET := $(BUILD_DIR)/$(PROJECT_NAME).exe
-	CFLAGS += -I"C:/raylib/include"
-	LDFLAGS += -L"C:/raylib/lib"
+	CFLAGS += -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS
+	LDFLAGS += -mconsole
 else
 	UNAME_S := $(shell uname -s)
 	ifeq ($(UNAME_S), Linux)
@@ -30,9 +30,9 @@ else
 endif
 
 
-APP_SRC = $(wildcard $(BIN_DIR)/*.c)
-LIB_SRC = $(wildcard $(SRC_DIR)/*.c)
-TEST_SRC = $(wildcard $(TEST_DIR)/*.c)
+APP_SRC = $(shell find $(BIN_DIR) -type f -name '*.c')
+LIB_SRC = $(shell find $(SRC_DIR) -type f -name '*.c')
+TEST_SRC = $(shell find $(TEST_DIR) -type f -name '*.c')
 
 APP_OBJ = $(patsubst $(BIN_DIR)/%.c, $(OBJ_DIR)/%.o, $(APP_SRC))
 LIB_OBJ = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(LIB_SRC))
@@ -41,8 +41,7 @@ DEPS = $(ALL_OBJ:.o=.d)
 
 TEST_TARGETS = $(patsubst $(TEST_DIR)/%.c, $(BUILD_DIR)/%, $(TEST_SRC))
 
-
-CHECK_FILES = $(wildcard $(BIN_DIR)/*.c) $(wildcard $(SRC_DIR)/*.c) $(wildcard $(TEST_DIR)/*.c) $(wildcard $(INC_DIR)/*.h)
+CHECK_FILES = $(shell find $(BIN_DIR) $(SRC_DIR) $(TEST_DIR) $(INC_DIR) -name '*.c' -or -name '*.h')
 
 .PHONY: all test clean run check format-check tidy-check format tidy-fix docs
 
