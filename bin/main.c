@@ -12,7 +12,7 @@ int main(void) {
 
     InitWindow(screen_width, screen_height, "Varázspuli");
 
-    if (world_init(40, "assets/models/rooms") != 0) {
+    if (world_init(1238972181, "assets/models/rooms") != 0) {
         TraceLog(LOG_ERROR, "Failed to initialize game world. Exiting.");
         CloseWindow();
         return -1;
