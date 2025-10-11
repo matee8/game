@@ -222,4 +222,3 @@ void unload_player(struct player* player) {
     unload_anim(&player->idle_anim);
     unload_anim(&player->run_anim);
 }
-
