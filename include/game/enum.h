@@ -10,7 +10,7 @@ enum neighbor {
     BACKWARD /**< Neighbor behind */
 };
 
-enum direction{
+enum direction {
     WEST,
     EAST,
     NORTH,
@@ -22,11 +22,11 @@ enum direction{
 };
 
 enum player_state {
-    IDLE,
-    RUNNING,
-    ATTACKING,
-    RELOADING,
-    DEAD
-}
+    STATE_IDLE,
+    STATE_RUNNING,
+    STATE_ATTACKING,
+    STATE_RELOADING,
+    STATE_DEAD
+};
 
 #endif

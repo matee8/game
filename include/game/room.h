@@ -13,8 +13,8 @@
 #define ROOM_H
 
 #include <raylib.h>
-#include "player.h"
 #include "enum.h"
+#include "player.h"
 
 /**
  * @enum neighbor

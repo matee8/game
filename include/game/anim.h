@@ -3,7 +3,7 @@
 
 #include <raylib.h>
 
-struct anim{
+struct anim {
     int frame_count;
     Image gif_anim;
     Texture2D tex_anim;
@@ -18,4 +18,3 @@ void update_anim(struct anim* animation);
 void unload_anim(struct anim* animation);
 
 #endif
-
