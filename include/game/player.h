@@ -13,7 +13,9 @@
 
 #include <raylib.h>
 #include <stdbool.h>
+
 #include "anim.h"
+#include "game/camera.h"
 
 /**
  * @def NUM_DIRECTIONS
@@ -96,14 +98,14 @@ void init_player(struct player* player,
                  int health);
 
 /**
- * @brief Updates the player's state, position, and interactions.
- *
- * This function should be called every frame to update the player's movement,
- * state transitions, and animations.
- *
- * @param player Pointer to the player to update
+ * Updates the player's position based on user input, relative to the camera's
+ * view.
+ * @param player The player instance to update.
+ * @param camera The current game camera, used for direction calculation.
+ * @param current_cell The cell the player is currently in (for future
+ * collision).
  */
-void update_player(struct player* player);
+void update_player(struct player* player, const struct camera* camera);
 
 /**
  * @brief Draws the player in the 3D world using the provided camera.
