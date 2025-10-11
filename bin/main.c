@@ -99,7 +99,7 @@ int main(void) {
 
         BeginMode3D(camera.camera_m);
 
-        DrawModel(player.model, player.position, 0.1F, WHITE);
+        draw_player(&player, camera.camera_m);
         DrawModel(room1.model, room1.position, room1.scale, RED);
         DrawModel(room2.model, room2.position, room2.scale, BLACK);
         DrawModel(room3.model, room3.position, room3.scale, BLUE);
@@ -117,8 +117,11 @@ int main(void) {
     // De-Initialization
     //--------------------------------------------------------------------------------------
     // UnloadTexture(player.texture);
-    UnloadModel(player.model);
+    unload_player(&player);
     UnloadModel(room1.model);
+    UnloadModel(room2.model);
+    UnloadModel(room3.model);
+    
 
     CloseWindow();  // Close window and OpenGL context
     //--------------------------------------------------------------------------------------

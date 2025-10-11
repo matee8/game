@@ -39,9 +39,9 @@ BoundingBox get_world_box(struct room* room) {
 
 Vector3 get_center(struct room* room) {
     return (Vector3){
-        (room->bounds.min.x + room->bounds.max.x) / 2.0F + room->position.x,
-        (room->bounds.min.y + room->bounds.max.y) / 2.0F + room->position.y,
-        (room->bounds.min.z + room->bounds.max.z) / 2.0F + room->position.z};
+        (room->bounds.min.x + room->bounds.max.x) / 2.0F,
+        (room->bounds.min.y + room->bounds.max.y) / 2.0F,
+        (room->bounds.min.z + room->bounds.max.z) / 2.0F};
 }
 
 void update_room(struct room** current_room, struct player* player) {

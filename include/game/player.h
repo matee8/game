@@ -12,6 +12,9 @@
 #define GAME_PLAYER_H
 
 #include <raylib.h>
+#include "anim.h"
+#include "enum.h"
+#include <stdbool.h>
 
 /**
  * @struct player
@@ -20,18 +23,20 @@
  * The player structure contains information about the player's position, speed,
  * health, direction, and 3D model/texture for rendering.
  */
+
+const int NUM_DIRECTIONS = 8;
+
 struct player {
     Vector3 position; /**< World position of the player */
     float speed;      /**< Movement speed of the player */
     int health;       /**< Current health of the player */
-    int direction;    /**< Current facing direction of the player */
-    Model model;      /**< 3D model representing the player */
-
-    int frameCount;
-    int currentFrame;
-    float frameTime;
-    float frameTimer;
-    Texture2D frames[]; /**< Texture frames applied to the player's model */
+    bool moving;      /**< Is the player currently moving */ 
+    enum direction direction;    /**< Current facing direction of the player */
+    struct anim idle_anim[NUM_DIRECTIONS]; /**< Animation for the player's idle state */
+    struct anim run_anim[NUM_DIRECTIONS]; /**< Animation for the player's running state */
+    struct anim death_anim[NUM_DIRECTIONS]; /**< Animation for the player's death state */
+    struct anim attack_anim[NUM_DIRECTIONS]; /**< Animation for the player's attack state */
+    struct anim reload_anim[NUM_DIRECTIONS]; /**< Animation for the player's reload state */
 };
 
 /**
@@ -53,5 +58,8 @@ void init_player(struct player* player,
  * @param player Pointer to the player to update
  */
 void update_player(struct player* player);
+
+void draw_player(struct player* player, Camera3D camera);
+void unload_player(struct player* player);
 
 #endif  // PLAYER_H
