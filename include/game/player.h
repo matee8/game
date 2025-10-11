@@ -14,7 +14,6 @@
 #include <raylib.h>
 #include <stdbool.h>
 #include "anim.h"
-#include "enum.h"
 
 /**
  * @def NUM_DIRECTIONS

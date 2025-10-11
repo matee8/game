@@ -13,7 +13,6 @@
 #define ROOM_H
 
 #include <raylib.h>
-#include "enum.h"
 #include "player.h"
 
 /**
