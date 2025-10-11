@@ -67,6 +67,7 @@ struct player {
     enum direction direction; /**< Current facing direction of the player */
     enum player_state state;  /**< Current state of the player */
 
+<<<<<<< HEAD
     struct anim idle_anim[NUM_DIRECTIONS]; /**< Animations for the player's idle
                                               state */
     struct anim run_anim[NUM_DIRECTIONS];  /**< Animations for the player's
@@ -76,6 +77,17 @@ struct player {
     struct anim attack_anim[NUM_DIRECTIONS]; /**< Animations for the player's
                                                 attack state */
     struct anim reload_anim[NUM_DIRECTIONS]; /**< Animations for the player's
+=======
+    struct anim
+        idle_anim[NUM_DIRECTIONS]; /**< Animation for the player's idle state */
+    struct anim run_anim[NUM_DIRECTIONS];    /**< Animation for the player's
+                                                running state */
+    struct anim death_anim[NUM_DIRECTIONS];  /**< Animation for the player's
+                                                death state */
+    struct anim attack_anim[NUM_DIRECTIONS]; /**< Animation for the player's
+                                                attack state */
+    struct anim reload_anim[NUM_DIRECTIONS]; /**< Animation for the player's
+>>>>>>> 6386b42 (chore: clang-tidy and format)
                                                 reload state */
 };
 

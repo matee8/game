@@ -59,4 +59,8 @@ void update_anim(struct anim* animation);
  */
 void unload_anim(struct anim* animation);
 
+<<<<<<< HEAD
 #endif  // ANIM_H
+=======
+#endif
+>>>>>>> 6386b42 (chore: clang-tidy and format)
