@@ -20,6 +20,15 @@
  * @enum neighbor
  * @brief Enum representing possible directions for neighboring rooms.
  */
+ enum neighbor {
+    RIGHT,   /**< Neighbor to the right */
+    LEFT,    /**< Neighbor to the left */
+    UP,      /**< Neighbor above */
+    DOWN,    /**< Neighbor below */
+    FORWARD, /**< Neighbor in front */
+    BACKWARD /**< Neighbor behind */
+};
+
 
 /**
  * @struct room
