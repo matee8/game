@@ -30,8 +30,9 @@ struct player {
     Vector3 position; /**< World position of the player */
     float speed;      /**< Movement speed of the player */
     int health;       /**< Current health of the player */
-    bool moving;      /**< Is the player currently moving */ 
     enum direction direction;    /**< Current facing direction of the player */
+    enum player_state state; /**< Current state of the player */
+
     struct anim idle_anim[NUM_DIRECTIONS]; /**< Animation for the player's idle state */
     struct anim run_anim[NUM_DIRECTIONS]; /**< Animation for the player's running state */
     struct anim death_anim[NUM_DIRECTIONS]; /**< Animation for the player's death state */
