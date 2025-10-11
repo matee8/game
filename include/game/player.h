@@ -24,7 +24,7 @@
  * health, direction, and 3D model/texture for rendering.
  */
 
-const int NUM_DIRECTIONS = 8;
+#define NUM_DIRECTIONS 8
 
 struct player {
     Vector3 position; /**< World position of the player */
