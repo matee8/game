@@ -11,7 +11,8 @@
 #include "game/world/grid.h"
 #include "game/world/room_def.h"
 
-static const float ROOM_SIZE = 4.0F;
+static const float ROOM_SCALE = 5.0F;
+static const float ROOM_SIZE = 4.0F * ROOM_SCALE;
 static const int LOAD_RADIUS = 1;
 
 static int32_t player_grid_x = -9999;
@@ -110,10 +111,36 @@ int world_draw(void) {
                 Vector3 room_pos = {.x = (float)cell->grid_x * ROOM_SIZE,
                                     .y = 0.0F,
                                     .z = (float)cell->grid_y * ROOM_SIZE};
-                DrawModel(cell->model, room_pos, 1.0F, WHITE);
+                DrawModel(cell->model, room_pos, ROOM_SCALE, WHITE);
             }
         }
     }
 
     return 0;
+}
+
+struct world_cell* world_get_cell_for_position(Vector3 pos) {
+    if (!is_initialized) {
+        return nullptr;
+    }
+
+    int32_t grid_x = (int32_t)roundf(pos.x / ROOM_SIZE);
+    int32_t grid_y = (int32_t)roundf(pos.z / ROOM_SIZE);
+
+    return grid_get_cell(grid_x, grid_y);
+}
+
+Vector3 world_get_room_center(Vector3 pos) {
+    int32_t grid_x = (int32_t)roundf(pos.x / ROOM_SIZE);
+    int32_t grid_y = (int32_t)roundf(pos.z / ROOM_SIZE);
+
+    return (Vector3){
+        .x = (float)grid_x * ROOM_SIZE,
+        .y = 0.0F,
+        .z = (float)grid_y * ROOM_SIZE,
+    };
+}
+
+Vector3 world_get_spawn_position(void) {
+    return (Vector3){0.0F, 0.1F, 0.0F};
 }

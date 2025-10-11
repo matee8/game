@@ -13,7 +13,6 @@
 #define GAME_CAMERA_H
 
 #include <raylib.h>
-#include "room.h"
 
 /**
  * @struct camera
@@ -23,12 +22,8 @@
  * previously active room for smooth transitions or updates.
  */
 struct camera {
-    Camera3D camera_m; /**< The Raylib 3D camera */
-    struct room*
-        prev_current_room;   /**< Pointer to the previously active room */
-    Vector3 prev_position;   /**< Previous position of the camera */
+    Camera3D camera_m;       /**< The Raylib 3D camera */
     Vector3 target_position; /**< Previous target point of the camera */
-    Vector3 prev_center;
     Vector3 target_center;
 };
 
@@ -40,11 +35,13 @@ struct camera {
 void init_camera(struct camera* camera);
 
 /**
- * @brief Updates the camera based on the current room and its state.
+ * Updates the camera's target focus point.
+ * The camera will smoothly interpolate its position and target towards the
+ * new center point.
  *
- * @param camera Pointer to the camera to update
- * @param current_room Pointer to the current active room
+ * @param camera The camera instance to update.
+ * @param new_center The new world-space position the camera should look at.
  */
-void update_camera(struct camera* camera, struct room* current_room);
+void camera_focus_on(struct camera* camera, Vector3 new_center);
 
 #endif  // CAMERA_H
