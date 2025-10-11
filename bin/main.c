@@ -30,6 +30,10 @@ int main(void) {
         update_player(&player);
         world_update(player.position);
 
+        Vector3 current_room_center = world_get_room_center(player.position);
+
+        camera_focus_on(&camera, current_room_center);
+
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
