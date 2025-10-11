@@ -117,3 +117,29 @@ int world_draw(void) {
 
     return 0;
 }
+
+struct world_cell* world_get_cell_for_position(Vector3 pos) {
+    if (!is_initialized) {
+        return nullptr;
+    }
+
+    int32_t grid_x = (int32_t)roundf(pos.x / ROOM_SIZE);
+    int32_t grid_y = (int32_t)roundf(pos.z / ROOM_SIZE);
+
+    return grid_get_cell(grid_x, grid_y);
+}
+
+Vector3 world_get_room_center(Vector3 pos) {
+    int32_t grid_x = (int32_t)roundf(pos.x / ROOM_SIZE);
+    int32_t grid_y = (int32_t)roundf(pos.z / ROOM_SIZE);
+
+    return (Vector3){
+        .x = (float)grid_x * ROOM_SIZE,
+        .y = 0.0F,
+        .z = (float)grid_y * ROOM_SIZE,
+    };
+}
+
+Vector3 world_get_spawn_position(void) {
+    return (Vector3){0.0F, 0.1F, 0.0F};
+}

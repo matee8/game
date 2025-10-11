@@ -12,6 +12,8 @@
 
 #include "raylib.h"
 
+#include "game/world/grid.h"
+
 /**
  * @brief Initializes the entire world system.
  *
@@ -44,5 +46,23 @@ int world_update(Vector3 player_pos);
  * @brief Draws all visible and loaded rooms in the world.
  */
 int world_draw(void);
+
+/**
+ * Returns the world_cell for the given world-space position.
+ * The returned pointer is owned by the world module; do not free it.
+ * Returns NULL if no cell exists at that position.
+ */
+struct world_cell* world_get_cell_for_position(Vector3 pos);
+
+/**
+ * Returns the world-space center (Vector3) of the grid cell containing pos.
+ * This provides a stable focus point for the camera.
+ */
+Vector3 world_get_room_center(Vector3 pos);
+
+/**
+ * Returns the designated spawn position for the player in the starting room.
+ */
+Vector3 world_get_spawn_position(void);
 
 #endif
