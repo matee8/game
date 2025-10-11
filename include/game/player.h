@@ -57,6 +57,9 @@ enum player_state {
  * health, current state, facing direction, and animations for different
  * actions.
  */
+
+const int NUM_DIRECTIONS = 8;
+
 struct player {
     Vector3 position;         /**< World position of the player */
     float speed;              /**< Movement speed of the player */
