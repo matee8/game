@@ -50,7 +50,6 @@ enum player_state {
     STATE_DEAD       /**< Player is dead */
 };
 
-
 /**
  * @struct player
  * @brief Represents a player in the 3D environment.
