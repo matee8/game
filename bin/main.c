@@ -12,7 +12,7 @@ int main(void) {
 
     InitWindow(screen_width, screen_height, "Varázspuli");
 
-    if (world_init(1238972181, "assets/models/rooms") != 0) {
+    if (world_init(42, "assets/models/rooms") != 0) {
         TraceLog(LOG_ERROR, "Failed to initialize game world. Exiting.");
         CloseWindow();
         return -1;
@@ -29,7 +29,7 @@ int main(void) {
     SetTargetFPS(60);
 
     while (!WindowShouldClose()) {
-        update_player(&player);
+        update_player(&player, &camera);
         world_update(player.position);
 
         Vector3 current_room_center = world_get_room_center(player.position);
