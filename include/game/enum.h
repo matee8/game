@@ -21,4 +21,12 @@ enum direction{
     SOUTH_WEST,
 };
 
+enum player_state {
+    IDLE,
+    RUNNING,
+    ATTACKING,
+    RELOADING,
+    DEAD
+}
+
 #endif
