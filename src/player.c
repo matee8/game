@@ -4,6 +4,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "raymath.h"
+
+#include "game/camera.h"
+
 enum { FILEPATH_SIZE = 128 };
 
 // Helper function to safely format a file path
@@ -79,49 +83,42 @@ enum direction get_direction(struct player* player, int dx, int dz) {
     return player->direction;
 }
 
-void update_player(struct player* player) {
+void update_player(struct player* player, const struct camera* camera) {
     if (player->state == STATE_DEAD) {
         update_anim(&player->death_anim[player->direction]);
         return;
     }
 
-    int dx = 0;
-    int dz = 0;
+    Vector3 cam_forward =
+        Vector3Subtract(camera->camera_m.target, camera->camera_m.position);
+    cam_forward.y = 0;
+    cam_forward = Vector3Normalize(cam_forward);
 
+    Vector3 cam_right =
+        Vector3CrossProduct(cam_forward, (Vector3){0.0f, 1.0f, 0.0f});
+
+    Vector3 move_dir = {0};
     if (IsKeyDown(KEY_W)) {
-        dz -= 1;
+        move_dir = Vector3Add(move_dir, cam_forward);
     }
     if (IsKeyDown(KEY_S)) {
-        dz += 1;
+        move_dir = Vector3Subtract(move_dir, cam_forward);
     }
     if (IsKeyDown(KEY_A)) {
-        dx -= 1;
+        move_dir = Vector3Subtract(move_dir, cam_right);
     }
     if (IsKeyDown(KEY_D)) {
-        dx += 1;
+        move_dir = Vector3Add(move_dir, cam_right);
     }
 
-    if (IsKeyDown(KEY_W)) {
-        dz -= 1;
-    }
-    if (IsKeyDown(KEY_S)) {
-        dz += 1;
-    }
-    if (IsKeyDown(KEY_A)) {
-        dx -= 1;
-    }
-    if (IsKeyDown(KEY_D)) {
-        dx += 1;
-    }
+    if (Vector3LengthSqr(move_dir) > 0) {
+        move_dir = Vector3Normalize(move_dir);
 
-    bool moving = (bool)(dx != 0 || dz != 0);
+        Vector3 next_position =
+            Vector3Add(player->position, Vector3Scale(move_dir, player->speed));
 
-    // Mozgás frissítése
-    if (moving) {
-        float length = sqrtf((float)(dx * dx + dz * dz));
-        player->position.x += ((float)dx / length) * player->speed;
-        player->position.z += ((float)dz / length) * player->speed;
-        player->direction = get_direction(player, dx, dz);
+        player->position = next_position;
+
         player->state = STATE_RUNNING;
     } else if (player->state == STATE_RUNNING) {
         player->state = STATE_IDLE;

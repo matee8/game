@@ -2,9 +2,12 @@
 
 #include "raymath.h"
 
+static const Vector3 CAMERA_OFFSET = {15.0F, 15.0F, 0.0F};
+
 void init_camera(struct camera* camera) {
     camera->camera_m.position = (Vector3){0.0F, 15.0F, 15.0F};
-    camera->camera_m.target = (Vector3){0.0F, 0.0F, 0.0F};
+    camera->camera_m.position =
+        Vector3Add(camera->camera_m.target, CAMERA_OFFSET);
     camera->camera_m.up = (Vector3){0.0F, 1.0F, 0.0F};
     camera->camera_m.fovy = 45.0F;
     camera->camera_m.projection = CAMERA_PERSPECTIVE;
@@ -19,11 +22,8 @@ void camera_focus_on(struct camera* camera, Vector3 new_center) {
         camera->target_center.z != new_center.z) {
         camera->target_center = new_center;
 
-        camera->target_position = (Vector3){
-            .x = camera->target_center.x + 0.0F,
-            .y = camera->target_center.y + 15.0F,
-            .z = camera->target_center.z + 15.0F,
-        };
+        camera->target_position =
+            Vector3Add(camera->target_center, CAMERA_OFFSET);
     }
 
     float lerp_factor = 0.1F;
