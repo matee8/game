@@ -192,4 +192,34 @@ void unload_player(struct player* player) {
         unload_anim(&player->attack_anim[i]);
         unload_anim(&player->reload_anim[i]);
     }
+    if (IsKeyDown(KEY_W)) {
+        player->position.z -= player->speed;
+        player->direction = NORTH;
+        moving = true;
+    }
+    if (IsKeyDown(KEY_S)) {
+        player->position.z += player->speed;
+        player->direction = SOUTH;
+        moving = true;
+    }
+
+    player->moving = moving;
+
+    if (moving) {
+        update_anim(&player->run_anim);
+    } else {
+        update_anim(&player->idle_anim);
+    }
+
 }
+
+void draw_player(struct player* player, Camera3D camera) {
+    DrawBillboard(camera, player->moving ? player->run_anim.tex_anim : player->idle_anim.tex_anim,
+                  player->position, 10.0F, WHITE);
+}
+
+void unload_player(struct player* player) {
+    unload_anim(&player->idle_anim);
+    unload_anim(&player->run_anim);
+}
+
