@@ -121,7 +121,6 @@ int main(void) {
     UnloadModel(room1.model);
     UnloadModel(room2.model);
     UnloadModel(room3.model);
-    
 
     CloseWindow();  // Close window and OpenGL context
     //--------------------------------------------------------------------------------------

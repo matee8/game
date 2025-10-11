@@ -12,9 +12,9 @@
 #define GAME_PLAYER_H
 
 #include <raylib.h>
+#include <stdbool.h>
 #include "anim.h"
 #include "enum.h"
-#include <stdbool.h>
 
 /**
  * @struct player
@@ -27,17 +27,22 @@
 #define NUM_DIRECTIONS 8
 
 struct player {
-    Vector3 position; /**< World position of the player */
-    float speed;      /**< Movement speed of the player */
-    int health;       /**< Current health of the player */
-    enum direction direction;    /**< Current facing direction of the player */
-    enum player_state state; /**< Current state of the player */
+    Vector3 position;         /**< World position of the player */
+    float speed;              /**< Movement speed of the player */
+    int health;               /**< Current health of the player */
+    enum direction direction; /**< Current facing direction of the player */
+    enum player_state state;  /**< Current state of the player */
 
-    struct anim idle_anim[NUM_DIRECTIONS]; /**< Animation for the player's idle state */
-    struct anim run_anim[NUM_DIRECTIONS]; /**< Animation for the player's running state */
-    struct anim death_anim[NUM_DIRECTIONS]; /**< Animation for the player's death state */
-    struct anim attack_anim[NUM_DIRECTIONS]; /**< Animation for the player's attack state */
-    struct anim reload_anim[NUM_DIRECTIONS]; /**< Animation for the player's reload state */
+    struct anim
+        idle_anim[NUM_DIRECTIONS]; /**< Animation for the player's idle state */
+    struct anim run_anim[NUM_DIRECTIONS];    /**< Animation for the player's
+                                                running state */
+    struct anim death_anim[NUM_DIRECTIONS];  /**< Animation for the player's
+                                                death state */
+    struct anim attack_anim[NUM_DIRECTIONS]; /**< Animation for the player's
+                                                attack state */
+    struct anim reload_anim[NUM_DIRECTIONS]; /**< Animation for the player's
+                                                reload state */
 };
 
 /**
