@@ -22,14 +22,14 @@
  * @brief Represents compass directions for navigation or orientation.
  */
 enum direction {
-    WEST,       /**< West direction */
-    EAST,       /**< East direction */
-    NORTH,      /**< North direction */
-    SOUTH,      /**< South direction */
-    NORTH_EAST, /**< North-East direction */
-    NORTH_WEST, /**< North-West direction */
-    SOUTH_EAST, /**< South-East direction */
+    NORTH,       /**< North direction */
+    NORTH_EAST,       /**< North-East direction */
+    EAST,      /**< East direction */
+    SOUTH_EAST,      /**< South-East direction */
+    SOUTH, /**< South direction */
     SOUTH_WEST, /**< South-West direction */
+    WEST, /**< West direction */
+    NORTH_WEST, /**< North-West direction */
 };
 
 /**

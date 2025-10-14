@@ -21,7 +21,7 @@ int main(void) {
     Vector3 spawn_position = world_get_spawn_position();
 
     struct player player;
-    init_player(&player, spawn_position, 0.1F, 100);
+    init_player(&player, spawn_position, 0.15F, 100);
 
     struct camera camera;
     init_camera(&camera);

@@ -34,24 +34,24 @@ void init_player(struct player* player,
 
     for (int i = 0; i < NUM_DIRECTIONS; i++) {
         format_filepath(filepath, sizeof(filepath),
-                        "assets/gifs/player/idle/idle_%d.gif", i * 45);
+                        "assets/gifs/player/idle/idle%d.gif", i * 45);
         init_anim(&player->idle_anim[i], filepath, 8);
 
         format_filepath(filepath, sizeof(filepath),
-                        "assets/gifs/player/run/run_%d.gif", i * 45);
+                        "assets/gifs/player/run/run%d.gif", i * 45);
         init_anim(&player->run_anim[i], filepath, 4);
 
         format_filepath(filepath, sizeof(filepath),
-                        "assets/gifs/player/death/death_%d.gif", i * 45);
+                        "assets/gifs/player/death/death%d_1.gif", i * 45);
         init_anim(&player->death_anim[i], filepath, 6);
 
         format_filepath(filepath, sizeof(filepath),
-                        "assets/gifs/player/attack/attack_%d.gif", i * 45);
-        init_anim(&player->attack_anim[i], filepath, 6);
+                        "assets/gifs/player/shoot/shoot%d.gif", i * 45);
+        init_anim(&player->attack_anim[i], filepath, 4);
 
         format_filepath(filepath, sizeof(filepath),
-                        "assets/gifs/player/reload/reload_%d.gif", i * 45);
-        init_anim(&player->reload_anim[i], filepath, 6);
+                        "assets/gifs/player/reload/reload%d.gif", i * 45);
+        init_anim(&player->reload_anim[i], filepath, 4);
     }
 }
 
@@ -97,18 +97,25 @@ void update_player(struct player* player, const struct camera* camera) {
     Vector3 cam_right =
         Vector3CrossProduct(cam_forward, (Vector3){0.0f, 1.0f, 0.0f});
 
+    int dx = 0;
+    int dz = 0;
+
     Vector3 move_dir = {0};
     if (IsKeyDown(KEY_W)) {
         move_dir = Vector3Add(move_dir, cam_forward);
+        dz -= 1;
     }
     if (IsKeyDown(KEY_S)) {
         move_dir = Vector3Subtract(move_dir, cam_forward);
+        dz += 1;
     }
     if (IsKeyDown(KEY_A)) {
         move_dir = Vector3Subtract(move_dir, cam_right);
+        dx -= 1;
     }
     if (IsKeyDown(KEY_D)) {
         move_dir = Vector3Add(move_dir, cam_right);
+        dx += 1;
     }
 
     if (Vector3LengthSqr(move_dir) > 0) {
@@ -118,6 +125,8 @@ void update_player(struct player* player, const struct camera* camera) {
             Vector3Add(player->position, Vector3Scale(move_dir, player->speed));
 
         player->position = next_position;
+
+        player->direction = get_direction(player, dx, dz);
 
         player->state = STATE_RUNNING;
     } else if (player->state == STATE_RUNNING) {
