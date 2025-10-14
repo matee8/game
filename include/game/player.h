@@ -18,13 +18,6 @@
 #include "game/camera.h"
 
 /**
- * @def NUM_DIRECTIONS
- * @brief Number of directions for directional animations (e.g., NORTH, SOUTH,
- * etc.).
- */
-#define NUM_DIRECTIONS 8
-
-/**
  * @enum direction
  * @brief Represents compass directions for navigation or orientation.
  */
@@ -60,7 +53,7 @@ enum player_state {
  * actions.
  */
 
-const int NUM_DIRECTIONS = 8;
+#define NUM_DIRECTIONS 8
 
 struct player {
     Vector3 position;         /**< World position of the player */

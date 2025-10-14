@@ -42,7 +42,7 @@ int main(void) {
         BeginMode3D(camera.camera_m);
 
         world_draw();
-        DrawModel(player.model, player.position, 0.1F, WHITE);
+        draw_player(&player, camera.camera_m);
         DrawGrid(100, 10.0F);
 
         EndMode3D();
@@ -53,7 +53,6 @@ int main(void) {
     }
 
     world_destroy();
-    UnloadModel(player);
 
     CloseWindow();
 
