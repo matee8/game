@@ -95,7 +95,7 @@ void update_player(struct player* player, const struct camera* camera) {
     cam_forward = Vector3Normalize(cam_forward);
 
     Vector3 cam_right =
-        Vector3CrossProduct(cam_forward, (Vector3){0.0f, 1.0f, 0.0f});
+        Vector3CrossProduct(cam_forward, (Vector3){0.0F, 1.0F, 0.0F});
 
     int dx = 0;
     int dz = 0;
