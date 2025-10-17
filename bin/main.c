@@ -12,37 +12,24 @@ int main(void) {
 
     InitWindow(screen_width, screen_height, "Varázspuli");
 
-    if (world_init(42, "assets/models/rooms") != 0) {
-        TraceLog(LOG_ERROR, "Failed to initialize game world. Exiting.");
-        CloseWindow();
-        return -1;
-    }
-
-    Vector3 spawn_position = world_get_spawn_position();
-
-    struct player player;
-    init_player(&player, spawn_position, 0.15F, 100);
-
     struct camera camera;
     init_camera(&camera);
+
+    Model room1 = LoadModel("assets/test/chiproom0.gltf");
+    room1.materials[0].maps[MATERIAL_MAP_ALBEDO].color = WHITE;
+    room1.materials[0].maps[MATERIAL_MAP_ALBEDO].value = 0.5f;
 
     SetTargetFPS(60);
 
     while (!WindowShouldClose()) {
-        update_player(&player, &camera);
-        world_update(player.position);
-
-        Vector3 current_room_center = world_get_room_center(player.position);
-
-        camera_focus_on(&camera, current_room_center);
 
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
         BeginMode3D(camera.camera_m);
 
-        world_draw();
-        draw_player(&player, camera.camera_m);
+        DrawModel(room1, (Vector3){0.0F, 0.0F, 0.0F}, 6.0F, WHITE);
+
         DrawGrid(100, 10.0F);
 
         EndMode3D();
