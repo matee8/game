@@ -5,9 +5,10 @@
 static const Vector3 CAMERA_OFFSET = {15.0F, 15.0F, 0.0F};
 
 void init_camera(struct camera* camera) {
+    camera->camera_m.target = (Vector3){0};
     camera->camera_m.position = (Vector3){0.0F, 15.0F, 15.0F};
     camera->camera_m.position =
-        Vector3Add(camera->camera_m.target, CAMERA_OFFSET);
+        Vector3Add(camera->camera_m.position, CAMERA_OFFSET);
     camera->camera_m.up = (Vector3){0.0F, 1.0F, 0.0F};
     camera->camera_m.fovy = 45.0F;
     camera->camera_m.projection = CAMERA_PERSPECTIVE;
